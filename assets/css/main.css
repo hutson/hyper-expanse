@@ -112,7 +112,7 @@ nav header img {
 }
 
 #splash {
-  background-image: url('/images/logo.min.svg');
+  background-image: url('{{ .logo.Permalink }}');
   background-position: center;
   background-size: 40% 40%;
   background-attachment: fixed;
