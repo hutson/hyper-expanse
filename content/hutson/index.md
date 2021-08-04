@@ -13,6 +13,24 @@ projects:
   - title: dotfiles
     description: Personal shell scripts and development environment configuration files.
     repository: https://github.com/hyper-expanse/dotfiles
+  - title: hyper-expanse.github.io
+    description: This website.
+    repository: https://github.com/hyper-expanse/hyper-expanse.github.io
+  - title: "@hutson/parse-repository-url"
+    description: Parse repository URLs to extract, SCM platform, domain, user, and project information.
+    repository: https://github.com/hyper-expanse/parse-repository-url
+  - title: "@hutson/semantic-delivery-gitlab"
+    description: Automatically generate a deliverable, along with a corresponding git tag, for GitLab-hosted source code.
+    repository: https://github.com/hyper-expanse/semantic-delivery-gitlab
+  - title: "@hutson/npm-deploy-git-tag"
+    description: Deploy a package to an npm-compatible registry using the latest git tag from that package's repository.
+    repository: https://github.com/hyper-expanse/npm-deploy-git-tag
+  - title: "@hutson/set-npm-auth-token-for-ci"
+    description: Set authentication token placeholder into `.npmrc` file for use in automated CI processes.
+    repository: https://github.com/hyper-expanse/set-npm-auth-token-for-ci
+  - title: "@hutson/conventional-changelog-config"
+    description: Standard conventional-changelog configuration as used by projects maintained by Hutson Betts (@hutson).
+    repository: https://github.com/hyper-expanse/conventional-changelog-config
 publications:
   - title: Pepper and Carrot
     subtitle: Episodes 1 - 6
