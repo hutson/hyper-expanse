@@ -9,6 +9,92 @@ pypi: hutson
 linkedin: hutson-betts-78420247
 opencollective: hutson
 liberapay: hutson
+employment:
+  - company: FactSet
+    end: Present
+    start: June, 2012
+    title: Lead Software Engineer
+    website: https://www.factset.com/
+    roles:
+      - end: Present
+        start: September, 2019
+        contributions:
+          - Responsible for managing FactSet’s source control, binary artifact, and CI/CD infrastructure.
+          - Recruited and trained a geographically-distributed agile engineering team.
+      - end: August, 2019
+        start: January, 2019
+        contributions:
+          - Contributed to a Platform as a Service internal product.
+          - Developed shared library, and its release process, for sharing components across PaaS portals.
+      - end: December, 2018
+        start: February, 2018
+        contributions:
+          - Led Open Source initiative for System Infrastructure department, doubling the number of Open Source projects.
+          - Managed infrastructure for automated dependency management; including upgrading and deprecation of packages.
+          - Developed release tool prototype capable of on-boarding many languages with automated package release workflows, all while minimizing operational overhead.
+      - end: January, 2018
+        start: October, 2015
+        contributions:
+          - Delivered on our company’s need for pre-configured tooling to build client facing web applications, libraries, and NodeJS services.
+          - Leveraged best of breed tools, such as GulpJS, Babel, Mocha, Karma, Express, Webpack, Rollup, etc.
+          - Reduced response time to changing business requirements for engineers, enabling them to go from new product, to shipped code, by offering project scaffolding tools based on the Yeoman framework.
+          - Accelerated tool adoption through extension documentation, training, and regular community engagement.
+          - On-boarded over 200 engineers within 2 years; a nearly 60% adoption by the web community within the company.
+          - Saw an average of 113 engineers per week leveraging our build tools.
+          - Lowered the barrier for cross-team collaboration through process and code standardization efforts.
+          - Established a process for quick deployment of tool configuration for consistent use of best practices across software projects; such as TSLint, Babel, and TypeScript.
+          - Authored our company’s NodeJS usage policy for production processes, and fulfill role as point person for engaging the NodeJS community, including the Node LTS Working Group.
+          - Organized a bi-weekly developer tool roundtable consisting of developers from across the company.
+      - end: September, 2016
+        start: October, 2015
+        contributions:
+          - Participated in on-call rotation for git-based GitLab source control instance, artifact repository, and continuous integration and delivery (CI/CD) platform; providing effective, and timely, support for outages and consumer needs.
+          - Appointed to the Architecture Review Board; a group tasked with defining company-wide engineering best practices and approving standard technology solutions.
+      - end: September, 2015
+        start: October, 2014
+        contributions:
+          - Developed scaffolding tool, using Yeoman framework, to bootstrap new Analytics and Fixed Income NodeJS services.
+          - Collaborated with engineers across multiple departments to maintain the build and deployment infrastructure for the company’s web products; which included working with Jenkins and Perforce.
+          - Assisted Analytics and Fixed Income software engineers troubleshoot build and deployment issues affecting their web products.
+          - Researched emerging web technologies, such as the evolving ECMA-262 standard, and explored approaches to improve the developer experience.
+      - end: October, 2014
+        start: June, 2012
+        contributions:
+          - Led retirement of key legacy application through community and product stakeholder engagement.
+          - Collaborated on building, from the ground up, one of the first web-based products for the Analytics department using BackboneJS, before migrating to AngularJS in response to our changing requirements and needs.
+          - Participated in a critical on-call rotation managing client portfolio data.
+  - company: Texas A&M University
+    end: June, 2012
+    start: February, 2010
+    title: Graduate Assistant
+    website: https://www.tamu.edu/
+    roles:
+      - contributions:
+        - Provided infrastructure support for the Texas A&M University's Virtual Network Engineering Lab (VNEL).
+        - Deployed 25 servers to 3 racks networked using 2 48-port CISCO 2960 switches.
+        - Enabled VNEL’s ability to rapidly scale by deploying an OpenNebula private cloud with GlusterFS as the storage backend.
+        - Built a virtual network orchestrator with Python, exposing functionality through a REST API.
+        - Sustained strong uptime at VNEL through network monitoring and alerting using an in-house deployment of OpenNMS.
+  - company: Texas Engineering Extension Service
+    end: August, 2009
+    start: August, 2006
+    title: Part-Time Software Engineer
+    website: https://teex.org/
+    roles:
+      - contributions:
+        - Contributed to the development and maintenance of flight and ground support software for Texas A&M University's AggieSat2 satellite (Which flew on STS-127).
+        - Streamlined multidisciplinary team collaboration by deploying collaboration tools, such as Trac and git, onto 4 Linux servers.
+        - Gained experience in various engineering fields through cross functional collaboration, system operations, and embedded hardware and software teamwork.
+        - Gained experience in management and organizational system processes.
+        - Led year long development effort on mission critical ground support software project with a team of 5 undergraduate students following Agile principles facilitated through the Scrum development framework.
+  - company: Texas A&M University - Galveston
+    end: May, 2006
+    start: August, 2005
+    title: Part-Time Office Assistant
+    website: https://tamug.edu/
+    roles:
+      - contributions:
+        - Supported various office functions including receptionist, intra campus mail delivery, organization of student documentation, and student documentation filing.
 projects:
   - title: dotfiles
     description: Personal shell scripts and development environment configuration files.

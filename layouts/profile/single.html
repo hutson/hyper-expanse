@@ -27,9 +27,9 @@
 	{{ range .Params.projects }}
 	<section>
 		<header>
-		  <h3>{{ .title }}</h3>
+			<h3>{{ .title }}</h3>
 		</header>
-	  <p>{{ .description | markdownify }}</p>
+		<p>{{ .description | markdownify }}</p>
 		<footer>
 			<a href="{{ .repository }}"><button class="info">View Repository</button></a>
 		</footer>
@@ -42,12 +42,12 @@
 	{{ range .Params.publications }}
 	<section>
 		<header>
-	    <h3>{{ .title }}</h3>
-	    <p class="subtitle">{{ .subtitle }}</p>
+			<h3>{{ .title }}</h3>
+			<p class="subtitle">{{ .subtitle }}</p>
 		</header>
-	  <p>{{ .description | markdownify }}</p>
+		<p>{{ .description | markdownify }}</p>
 		<footer>
-		  <a href="{{ .shop }}"><button class="info">Buy</button></a>
+			<a href="{{ .shop }}"><button class="info">Buy</button></a>
 		</footer>
 	</section>
 	{{ end }}
@@ -56,10 +56,33 @@
 <section>
 	<h2>Guides</h2>
 	<ul>
-	  {{ range where (where .Site.Pages "Type" "guide") "Draft" false }}
+		{{ range where (where .Site.Pages "Type" "guide") "Draft" false }}
 		<li><a href="{{ .Permalink }}">{{ .Title }}</a></li>
-	  {{ end }}
+		{{ end }}
 	</ul>
+</section>
+
+<section>
+	<h2>Employment</h2>
+	{{ range .Params.employment }}
+	<section>
+		<header>
+			<h3>{{ .company }}</h3>
+			<p class="subtitle">{{ .title }}, {{ .start }} - {{ .end }}</p>
+		</header>
+		{{ range .roles }}
+		{{ if .start }}<p>{{ .start }} - {{ .end }}</p>{{ end }}
+		<ul>
+			{{ range .contributions }}
+			<li>{{ . }}</li>
+			{{ end }}
+		</ul>
+		{{ end }}
+		<footer>
+			<a href="{{ .website }}"><button class="info">Website</button></a>
+		</footer>
+	</section>
+	{{ end }}
 </section>
 
 <p>{{ .Content }}</p>

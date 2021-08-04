@@ -4,10 +4,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>{{ .Title }}</title>
+	<meta charset="utf-8">
+	<title>{{ .Title }}</title>
 	<link rel="canonical" href="{{ .Permalink }}">
-  <link rel="stylesheet" href="{{ $style.Permalink }}" integrity="{{ $style.Data.Integrity }}">
+	<link rel="stylesheet" href="{{ $style.Permalink }}" integrity="{{ $style.Data.Integrity }}">
 	<link rel="icon" type="image/svg+xml" href="{{ $logo.Permalink }}" integrity="{{ $logo.Data.Integrity }}">
 	<style>
 		body {
@@ -25,19 +25,19 @@
 </head>
 <body>
 	{{ if not .IsHome }}
-  <nav>
+	<nav>
 		<header>
-	    <a href="/">
-		    <img src="{{ $logo.Permalink }}" width="30" height="30" alt="hyper-expanse">{{ .Site.Title }}
+			<a href="/">
+				<img src="{{ $logo.Permalink }}" width="30" height="30" alt="hyper-expanse">{{ .Site.Title }}
 			</a>
 		</header>
-  </nav>
+	</nav>
 	{{ end }}
 
 	<main>
-  {{ block "main" . }}
-  <!-- The part of the page that begins to differ between templates -->
-  {{ end }}
+	{{ block "main" . }}
+	<!-- The part of the page that begins to differ between templates -->
+	{{ end }}
 	</main>
 </body>
 
