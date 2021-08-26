@@ -1,5 +1,4 @@
 {{ $logo := resources.Get "images/logo.svg" | resources.Minify | resources.Fingerprint }}
-{{ $style := resources.Get "css/main.css" | resources.ExecuteAsTemplate "css/main.css" (dict "logo" $logo) | resources.Minify | resources.Fingerprint }}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -7,20 +6,9 @@
 	<meta charset="utf-8">
 	<title>{{ .Title }}</title>
 	<link rel="canonical" href="{{ .Permalink }}">
-	<link rel="stylesheet" href="{{ $style.Permalink }}" integrity="{{ $style.Data.Integrity }}">
 	<link rel="icon" type="image/svg+xml" href="{{ $logo.Permalink }}" integrity="{{ $logo.Data.Integrity }}">
 	<style>
-		body {
-		  background-color: #111215;
-		  color: white;
-		}
-
-		@media screen and (prefers-color-scheme: light) {
-			body {
-				background-color: white;
-				color: black;
-			}
-		}
+		{{ partial "head/style.css" $logo | safeCSS }}
 	</style>
 </head>
 <body>

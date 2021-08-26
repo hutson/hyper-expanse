@@ -2,15 +2,26 @@
 title: Hutson Betts
 type: profile
 picture: hutson-profile.webp
-bio: It's my passion to improve the software engineering experience through advocacy, guidance, and the development of automation tooling.
-github: hutson
-npm: hutson
-pypi: hutson
-linkedin: hutson-betts-78420247
-opencollective: hutson
-liberapay: hutson
+bio: "Husband and father working in the software and systems infrastructure fields. On this profile page you will find links to projects I have worked on, my printed publications, any public talks I’ve given, and guides I adhere to in my work.
+
+
+My professional passion is to improve the software engineering experience through advocacy, guidance, and the development of automation tooling. Typically this means one of three things: automating away daily toil so developers can focus on tasks that are more enjoyable and better aligned with their skills, deploying infrastructure to provide the appropriate layer of abstraction needed by development teams (IaaS/PaaS/SaaS), and offering my opinion when asked on topics such as engineering best practices, software sustainability, or what it takes to create a happy and productive environment for software development."
+follow:
+  - text: GitHub
+    url: https://github.com/hutson
+  - text: Npm
+    url: https://www.npmjs.com/~hutson
+  - text: PyPI
+    url: https://pypi.org/user/hutson
+  - text: Scuttlebutt
+    url: https://viewer.scuttlebot.io/%25qLklmpFUNVUHy4TBEr91FS0ZpPouizxnArgvF9MNTaU%3D.sha256
+sponsor:
+  - text: Open Collective
+    url: https://opencollective.com/hutson
+  - text: Librepay
+    url: https://liberapay.com/hutson
 employment:
-  - company: FactSet
+  - company: FactSet Research Systems
     end: Present
     start: June, 2012
     title: Lead Software Engineer
@@ -102,6 +113,9 @@ projects:
   - title: hyper-expanse.github.io
     description: This website.
     repository: https://github.com/hyper-expanse/hyper-expanse.github.io
+  - title: dayone-to-joplin
+    description: Import a Day One JSON export into the Joplin note-taking application with all journal entries and photos.
+    repository: https://github.com/hyper-expanse/dayone-to-joplin
   - title: "@hutson/parse-repository-url"
     description: Parse repository URLs to extract, SCM platform, domain, user, and project information.
     repository: https://github.com/hyper-expanse/parse-repository-url
@@ -117,6 +131,10 @@ projects:
   - title: "@hutson/conventional-changelog-config"
     description: Standard conventional-changelog configuration as used by projects maintained by Hutson Betts (@hutson).
     repository: https://github.com/hyper-expanse/conventional-changelog-config
+contributions:
+  - title: Conventional Commits
+    description: Organization devoted to developing a commit message convention for consumption by developer tooling.
+    url: https://github.com/conventional-commits
 publications:
   - title: Pepper and Carrot
     subtitle: Episodes 1 - 6

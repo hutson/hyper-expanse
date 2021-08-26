@@ -4,62 +4,61 @@
 {{ $profile := resources.Get $url | resources.Fingerprint }}
 
 <section id="profile">
-	<img src="{{ $profile.Permalink }}" alt="Profile picture of {{ .Title }}" width="200" height="200">
-
+	<img src="{{ $profile.Permalink }}" alt="Profile picture of {{ .Title }}" width="200px" height="200px">
 	<h1>{{ .Params.title }}</h1>
-
 	<p>{{ .Params.bio | markdownify }}</p>
-
-	<p>
-		{{ if .Params.gitlab }}<a href="https://gitlab.com/{{ .Params.gitlab }}"><button class="info">gitlab</button></a>{{ end }}
-		{{ if .Params.github }}<a href="https://github.com/{{ .Params.github }}"><button class="info">github</button></a>{{ end }}
-		{{ if .Params.npm }}<a href="https://www.npmjs.com/~{{ .Params.npm }}"><button class="info">npm</button></a>{{ end }}
-		{{ if .Params.pypi }}<a href="https://pypi.org/user/{{ .Params.pypi }}"><button class="info">pypi</button></a>{{ end }}
-		{{ if .Params.bintray }}<a href="https://bintray.com/{{ .Params.bintray }}"><button class="info">bintray</button></a>{{ end }}
-		{{ if .Params.linkedin }}<a href="https://www.linkedin.com/in/{{ .Params.linkedin }}"><button class="info">linkedin</button></a>{{ end }}
-		{{ if .Params.opencollective }}<a href="https://opencollective.com/{{ .Params.opencollective }}"><button class="info">open collective</button></a>{{ end }}
-		{{ if .Params.liberapay }}<a href="https://liberapay.com/{{ .Params.liberapay }}"><button class="info">liberapay</button></a>{{ end }}
-	</p>
 </section>
 
 <section>
-	<h2>Projects</h2>
+	<h2>Places You Can Follow My Work</h2>
+	{{ range .Params.follow }}
+	<p><b>=></b> <a href="{{ .url }}">{{ .text }}</a></p>
+	{{ end }}
+</section>
+
+<section>
+	<h2>My Projects</h2>
 	{{ range .Params.projects }}
 	<section>
-		<header>
-			<h3>{{ .title }}</h3>
-		</header>
 		<p>{{ .description | markdownify }}</p>
-		<footer>
-			<a href="{{ .repository }}"><button class="info">View Repository</button></a>
-		</footer>
+		<p><b>=></b> <a href="{{ .repository }}">{{ .title }}</a></p>
 	</section>
 	{{ end }}
 </section>
 
 <section>
-	<h2>Publications</h2>
+	<h2>Projects Where I Contribute</h2>
+	{{ range .Params.contributions }}
+	<section>
+		<p>{{ .description | markdownify }}</p>
+		<p><b>=></b> <a href="{{ .url }}">{{ .title }}</a></p>
+	</section>
+	{{ end }}
+</section>
+
+<section>
+	<h2>My Publications</h2>
 	{{ range .Params.publications }}
 	<section>
-		<header>
-			<h3>{{ .title }}</h3>
-			<p class="subtitle">{{ .subtitle }}</p>
-		</header>
+		<h3>{{ .title }} - {{ .subtitle }}</h3>
 		<p>{{ .description | markdownify }}</p>
-		<footer>
-			<a href="{{ .shop }}"><button class="info">Buy</button></a>
-		</footer>
+		<p><b>=></b> <a href="{{ .shop }}">Purchase printed copy of {{ .title }} - {{ .subtitle }}</a></p>
 	</section>
 	{{ end }}
 </section>
 
 <section>
-	<h2>Guides</h2>
-	<ul>
-		{{ range where (where .Site.Pages "Type" "guide") "Draft" false }}
-		<li><a href="{{ .Permalink }}">{{ .Title }}</a></li>
-		{{ end }}
-	</ul>
+	<h2>Guides I've Written</h2>
+	{{ range where (where .Site.Pages "Type" "guide") "Draft" false }}
+	<p><b>=></b> <a href="{{ .Permalink }}">{{ .Title }}</a></p>
+	{{ end }}
+</section>
+
+<section>
+	<h2>How to Sponsor Me</h2>
+	{{ range .Params.sponsor }}
+	<p><b>=></b> <a href="{{ .url }}">{{ .text }}</a></p>
+	{{ end }}
 </section>
 
 <section>
@@ -68,7 +67,7 @@
 	<section>
 		<header>
 			<h3>{{ .company }}</h3>
-			<p class="subtitle">{{ .title }}, {{ .start }} - {{ .end }}</p>
+			<p class="subtitle">Position: {{ .title }}, {{ .start }} - {{ .end }}</p>
 		</header>
 		{{ range .roles }}
 		{{ if .start }}<p>{{ .start }} - {{ .end }}</p>{{ end }}
@@ -79,7 +78,7 @@
 		</ul>
 		{{ end }}
 		<footer>
-			<a href="{{ .website }}"><button class="info">Website</button></a>
+			<p><b>=></b> <a href="{{ .website }}">{{ .company }}</a></p>
 		</footer>
 	</section>
 	{{ end }}

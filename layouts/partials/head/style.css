@@ -1,0 +1,81 @@
+body {
+	background-color: #111215;
+	color: white;
+}
+
+a {
+	text-decoration: none;
+	color: lightblue;
+}
+
+h2 {
+	border-bottom: 2px solid white;
+	display: inline-block;
+}
+
+html {
+	font-family: sans-serif
+}
+
+main {
+	margin: auto;
+	max-width: 700px;
+}
+
+nav {
+	font-size: 1.25rem;
+	margin: 10px;
+}
+
+nav a,
+nav a:hover,
+nav a:focus {
+	color: white;
+}
+
+nav header img {
+	margin-right: 5px;
+	vertical-align: top !important;
+}
+
+#profile {
+	text-align: justify;
+}
+
+#profile h1 {
+	text-align: center;
+}
+
+#profile img {
+	border-radius: 50%;
+	display: block;
+	margin: auto;
+}
+
+#splash {
+	background-image: url('{{ .Permalink }}');
+	background-position: center;
+	background-size: 40% 40%;
+	background-attachment: fixed;
+	background-repeat: no-repeat;
+	height: 100vh;
+}
+
+@media screen and (prefers-color-scheme: light) {
+	body {
+		background-color: white;
+		color: black;
+	}
+
+	a {
+		text-decoration: none;
+		color: blue;
+	}
+
+	nav a,
+	nav a:hover,
+	nav a:focus {
+		color: black;
+	}
+}
+
