@@ -4,9 +4,9 @@
 {{ $profile := resources.Get $url | resources.Fingerprint }}
 
 <section id="profile">
-	<img src="{{ $profile.Permalink }}" alt="Profile picture of {{ .Title }}" width="200px" height="200px">
+	<img src="{{ $profile.Permalink }}" alt="Profile picture of {{ .Title }}" width="200" height="200">
 	<h1>{{ .Params.title }}</h1>
-	<p>{{ .Params.bio | markdownify }}</p>
+	{{ .Params.bio | markdownify }}
 </section>
 
 <section>
@@ -20,7 +20,8 @@
 	<h2>My Projects</h2>
 	{{ range .Params.projects }}
 	<section>
-		<p>{{ .description | markdownify }}</p>
+		<h3>{{ .title }}</h3>
+		{{ .description | markdownify }}
 		<p><b>=></b> <a href="{{ .repository }}">{{ .title }}</a></p>
 	</section>
 	{{ end }}
@@ -30,7 +31,8 @@
 	<h2>Projects Where I Contribute</h2>
 	{{ range .Params.contributions }}
 	<section>
-		<p>{{ .description | markdownify }}</p>
+		<h3>{{ .title }}</h3>
+		{{ .description | markdownify }}
 		<p><b>=></b> <a href="{{ .url }}">{{ .title }}</a></p>
 	</section>
 	{{ end }}
@@ -41,7 +43,7 @@
 	{{ range .Params.publications }}
 	<section>
 		<h3>{{ .title }} - {{ .subtitle }}</h3>
-		<p>{{ .description | markdownify }}</p>
+		{{ .description | markdownify }}
 		<p><b>=></b> <a href="{{ .shop }}">Purchase printed copy of {{ .title }} - {{ .subtitle }}</a></p>
 	</section>
 	{{ end }}

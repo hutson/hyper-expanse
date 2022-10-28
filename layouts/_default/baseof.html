@@ -6,7 +6,7 @@
 	<meta charset="utf-8">
 	<title>{{ .Title }}</title>
 	<link rel="canonical" href="{{ .Permalink }}">
-	<link rel="icon" type="image/svg+xml" href="{{ $logo.Permalink }}" integrity="{{ $logo.Data.Integrity }}">
+	<link rel="icon" type="image/svg+xml" href="{{ $logo.Permalink }}" sizes="any">
 	<style>
 		{{ partial "head/style.css" $logo | safeCSS }}
 	</style>
