@@ -9,8 +9,6 @@ My professional passion is to improve the software engineering experience throug
 follow:
   - text: GitHub
     url: https://github.com/hutson
-  - text: Tildeverse
-    url: https://git.rawtext.club/hutson
   - text: Npm
     url: https://www.npmjs.com/~hutson
   - text: PyPI
@@ -111,28 +109,28 @@ employment:
 projects:
   - title: dotfiles
     description: Personal shell scripts and development environment configuration files.
-    repository: https://git.rawtext.club/hutson/dotfiles
+    repository: https://codeberg.org/hutson/dotfiles
   - title: hyper-expanse.github.io
     description: This website.
-    repository: https://git.rawtext.club/hutson/hyper-expanse.github.io
+    repository: https://codeberg.org/hutson/pages
   - title: dayone-to-joplin
     description: Import a Day One JSON export into the Joplin note-taking application with all journal entries and photos.
-    repository: https://git.rawtext.club/hutson/dayone-to-joplin
+    repository: https://codeberg.org/hutson/dayone-to-joplin
   - title: "@hutson/parse-repository-url"
     description: Parse repository URLs to extract, SCM platform, domain, user, and project information.
-    repository: https://git.rawtext.club/hutson/parse-repository-url
+    repository: https://codeberg.org/hutson/parse-repository-url
   - title: "@hutson/semantic-delivery-gitlab"
     description: Automatically generate a deliverable, along with a corresponding git tag, for GitLab-hosted source code.
-    repository: https://git.rawtext.club/hutson/semantic-delivery-gitlab
+    repository: https://codeberg.org/hutson/semantic-delivery-gitlab
   - title: "@hutson/npm-deploy-git-tag"
     description: Deploy a package to an npm-compatible registry using the latest git tag from that package's repository.
-    repository: https://git.rawtext.club/hutson/npm-deploy-git-tag
+    repository: https://codeberg.org/hutson/npm-deploy-git-tag
   - title: "@hutson/set-npm-auth-token-for-ci"
     description: Set authentication token placeholder into `.npmrc` file for use in automated CI processes.
-    repository: https://git.rawtext.club/hutson/set-npm-auth-token-for-ci
+    repository: https://codeberg.org/hutson/set-npm-auth-token-for-ci
   - title: "@hutson/conventional-changelog-config"
     description: Standard conventional-changelog configuration as used by projects maintained by Hutson Betts (@hutson).
-    repository: https://git.rawtext.club/hutson/conventional-changelog-config
+    repository: https://codeberg.org/hutson/conventional-changelog-config
 contributions:
   - title: Conventional Commits
     description: Organization devoted to developing a commit message convention for consumption by developer tooling.
