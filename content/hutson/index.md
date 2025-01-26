@@ -35,7 +35,7 @@ employment:
           - Lead for FactSet's internal generative AI coding assistant strategy and deployment since 2024.
           - Lead for FactSet's internal code quality analysis platform since 2023.
           - Lead for FactSet's internal code intelligence strategy and infrastructure since 2022.
-          - Technologies and tools I often work with include Git, AWS, Terraform, Packer, Bash, Golang, Linux, and a whole lot of different package managers.
+          - Technologies and tools I often work with include Git, AWS, Terraform, Packer, Bash, Golang, Lua, Linux, and a whole lot of different package managers.
       - end: August, 2019
         start: January, 2019
         contributions:
