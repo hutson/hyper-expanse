@@ -69,7 +69,7 @@
 	<section>
 		<header>
 			<h3>{{ .company }}</h3>
-			<p class="subtitle">Position: {{ .title }}, {{ .start }} - {{ .end }}</p>
+			<p class="subtitle">Position: {{ .title }}</p>
 		</header>
 		{{ range .roles }}
 		{{ if .start }}<p>{{ .start }} - {{ .end }}</p>{{ end }}
