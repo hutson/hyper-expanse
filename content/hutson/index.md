@@ -5,33 +5,37 @@ picture: hutson-profile.webp
 bio: "Husband and father working in the software and systems infrastructure fields. On this profile page you will find links to projects I have worked on, my printed publications, any public talks I’ve given, and guides I adhere to in my work.
 
 
-My professional passion is to improve the software engineering experience through advocacy, guidance, and the development of automation tooling. Typically this means one of three things: automating away daily toil so developers can focus on tasks that are more enjoyable and better aligned with their skills, deploying infrastructure to provide the appropriate layer of abstraction needed by development teams (IaaS/PaaS/SaaS), and offering my opinion when asked on topics such as engineering best practices, software sustainability, or what it takes to create a happy and productive environment for software development."
+My professional passion is to improve the software engineering experience through advocacy, guidance, and the development of automation tooling. Typically this means one of three things: automating away daily toil so developers can focus on tasks that are more enjoyable and better aligned with their goals, deploying infrastructure to provide the appropriate layer of abstraction needed by development teams (IaaS/PaaS/SaaS), and offering my opinion when asked on topics such as engineering best practices, software sustainability, or what it takes to create a happy and productive environment for software development."
 follow:
+  - text: Codeberg
+    url: https://codeberg.org/hutson
   - text: GitHub
     url: https://github.com/hutson
   - text: Npm
     url: https://www.npmjs.com/~hutson
   - text: PyPI
     url: https://pypi.org/user/hutson
-  - text: Scuttlebutt
-    url: https://viewer.scuttlebot.io/%25qLklmpFUNVUHy4TBEr91FS0ZpPouizxnArgvF9MNTaU%3D.sha256
 sponsor:
+  - text: GitHub Sponsors
+    url: https://github.com/sponsors/hutson
   - text: Open Collective
     url: https://opencollective.com/hutson
-  - text: Librepay
-    url: https://liberapay.com/hutson
 employment:
   - company: FactSet Research Systems
     end: Present
     start: June, 2012
-    title: Lead Software Engineer
+    title: Principal Software Engineer
     website: https://www.factset.com/
     roles:
       - end: Present
         start: September, 2019
         contributions:
-          - Responsible for managing FactSet’s source control, binary artifact, and CI/CD infrastructure.
-          - Recruited and trained a geographically-distributed agile engineering team.
+          - Technical lead for a team at FactSet responsible for architecting and building infrastructure that supports most engineers at FactSet in the areas of source control, artifact storage and distribution, continous integration and delivery, code intelligence, generative AI coding assistances, and code quality analysis.
+          - Recruited and trained a geographically-distributed agile engineering team to maintain the services and platforms our team provides to FactSet's engineering organization.
+          - Lead for FactSet's internal generative AI coding assistant strategy and deployment since 2024.
+          - Lead for FactSet's internal code quality analysis platform since 2023.
+          - Lead for FactSet's internal code intelligence strategy and infrastructure since 2022.
+          - Technologies and tools I often work with include Git, AWS, Terraform, Packer, Bash, Golang, Linux, and a whole lot of different package managers.
       - end: August, 2019
         start: January, 2019
         contributions:
