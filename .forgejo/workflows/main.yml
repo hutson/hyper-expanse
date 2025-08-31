@@ -1,0 +1,22 @@
+name: Pages
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-deploy:
+    runs-on: codeberg-tiny-lazy
+    container:
+      image: ghcr.io/catthehacker/ubuntu:act-24.04
+    steps:
+      - uses: https://code.forgejo.org/actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+
+      - name: Setup
+        run: |
+          sudo apt update
+          sudo apt install hugo
+
+      - name: Build
+        run: hugo --minify
