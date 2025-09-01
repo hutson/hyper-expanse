@@ -9,14 +9,40 @@ jobs:
   build-deploy:
     runs-on: codeberg-tiny-lazy
     container:
-      image: ghcr.io/catthehacker/ubuntu:act-24.04
+      # TODO: Instead of using a generic slim Debian image, should I create a custom image with
+      #       my required dependencies pre-installed?
+      image: debian:13.0-slim@sha256:c85a2732e97694ea77237c61304b3bb410e0e961dd6ee945997a06c788c545bb
     steps:
-      - uses: https://code.forgejo.org/actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-
       - name: Setup
-        run: |
-          sudo apt update
-          sudo apt install hugo
+        run: apt update && apt install hugo nodejs git ca-certificates --yes --no-install-recommends
+
+        # TODO: Can I replace this dependency on a Shared Action with direct calls to Git?
+      - name: Checkout
+        uses: https://code.forgejo.org/actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
       - name: Build
-        run: hugo --minify
+        run: hugo --minify --logLevel info
+
+      - name: Deploy
+        run: |
+          git config --global user.name "actions[bot]"
+          git config --global user.email "actions[bot]@example.com"
+
+          TEMP_DIR=$(mktemp -d)
+          cp -r public/* "$TEMP_DIR/"
+
+          git branch -D pages 2>/dev/null || echo "Local pages branch doesn't exist"
+          git push origin --delete pages 2>/dev/null || echo "Remote pages branch doesn't exist"
+
+          git checkout --orphan pages
+
+          find . \( -name .git -o -name .gitignore \) -prune -o -exec rm -rf {} + 2>/dev/null || true
+
+          cp -r "$TEMP_DIR"/* .
+          
+          rm -rf "$TEMP_DIR"
+
+          git add .
+          git commit -m "Deploy site from commit ${{ github.sha }}"
+
+          git push origin pages
