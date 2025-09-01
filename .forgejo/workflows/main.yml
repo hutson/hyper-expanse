@@ -29,7 +29,9 @@ jobs:
           git config --global user.email "actions[bot]@example.com"
 
           TEMP_DIR=$(mktemp -d)
+          shopt -s dotglob
           cp -r public/* "$TEMP_DIR/"
+          shopt -u dotglob
 
           git branch -D pages 2>/dev/null || echo "Local pages branch doesn't exist"
           git push origin --delete pages 2>/dev/null || echo "Remote pages branch doesn't exist"
@@ -38,7 +40,9 @@ jobs:
 
           find . \( -name .git -o -name .gitignore \) -prune -o -exec rm -rf {} + 2>/dev/null || true
 
+          shopt -s dotglob
           cp -r "$TEMP_DIR"/* .
+          shopt -u dotglob
           
           rm -rf "$TEMP_DIR"
 
