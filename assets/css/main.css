@@ -1,3 +1,5 @@
+@import 'hugo:vars';
+
 body {
 	background-color: #111215;
 	color: white;
@@ -53,7 +55,7 @@ nav header img {
 }
 
 #splash {
-	background-image: url('{{ .Permalink }}');
+	background-image: var(--logo-url);
 	background-position: center;
 	background-size: 40% 40%;
 	background-attachment: fixed;
@@ -78,4 +80,3 @@ nav header img {
 		color: black;
 	}
 }
-

@@ -1,22 +1,23 @@
 {{ $logo := resources.Get "images/logo.svg" | resources.Minify | resources.Fingerprint }}
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ site.Language.Locale }}">
 <head>
 	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>{{ .Title }}</title>
-	<link rel="canonical" href="{{ .Permalink }}">
+	{{ with site.Home.OutputFormats.Get "rss" }}
+		<link rel="alternate" type="application/rss+xml" title="{{ site.Title }}" href="{{ .RelPermalink }}">
+	{{ end }}
 	<link rel="icon" type="image/svg+xml" href="{{ $logo.Permalink }}" sizes="any">
-	<style>
-		{{ partial "head/style.css" $logo | safeCSS }}
-	</style>
+	{{ partial "head/css.html" . }}
 </head>
 <body>
 	{{ if not .IsHome }}
 	<nav>
 		<header>
 			<a href="/">
-				<img src="{{ $logo.Permalink }}" width="30" height="30" alt="hyper-expanse">{{ .Site.Title }}
+				<img src="{{ $logo.Permalink }}" width="30" height="30" alt="hyper-expanse">{{ site.Title }}
 			</a>
 		</header>
 	</nav>

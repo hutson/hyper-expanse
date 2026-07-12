@@ -1,10 +1,17 @@
 {{ define "main" }}
 
-{{ $url := print "images/" $.Params.picture }}
-{{ $profile := resources.Get $url | resources.Fingerprint }}
+{{ $src := resources.Get (printf "images/%s" .Params.picture) }}
+{{ $webp := $src.Process "resize 200x200 webp q98 hint picture" }}
+{{ $avif := $src.Process "resize 200x200 avif q98 hint picture" }}
 
 <section id="profile">
-	<img src="{{ $profile.Permalink }}" alt="Profile picture of {{ .Title }}" width="200" height="200">
+	{{/* AVIF first, then WebP; browsers select the first supported source,
+	     so ordering encodes a preference for better-compressed formats. */}}
+	<picture>
+		<source srcset="{{ $avif.RelPermalink }}" type="{{ $avif.MediaType.Type }}">
+		<source srcset="{{ $webp.RelPermalink }}" type="{{ $webp.MediaType.Type }}">
+		<img src="{{ $src.RelPermalink }}" alt="Profile picture of {{ .Title }}" width="200" height="200">
+	</picture>
 	<h1>{{ .Params.title }}</h1>
 	{{ .Params.bio | markdownify }}
 </section>
@@ -51,7 +58,7 @@
 
 <section>
 	<h2>Guides I've Written</h2>
-	{{ range where (where .Site.Pages "Type" "guide") "Draft" false }}
+	{{ range where (where site.RegularPages "Type" "guide") "Draft" false }}
 	<p><b>=></b> <a href="{{ .Permalink }}">{{ .Title }}</a></p>
 	{{ end }}
 </section>

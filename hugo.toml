@@ -1,0 +1,24 @@
+baseURL = "https://hyper-expanse.net/"
+locale = "en-US"
+title = "hyper-expanse"
+
+# The site does not use tags or categories; disable the empty index pages
+# that Hugo would otherwise generate.
+disableKinds = ["taxonomy", "term"]
+
+cleanDestinationDir = true
+
+# Derive page dates from Git commit metadata so manually editing front
+# matter is not required when authoring or updating content.
+enableGitInfo = true
+[frontmatter]
+  date = [':git', 'date', 'publishdate', 'pubdate', 'published']
+
+[outputs]
+  home = ["html", "rss"]
+
+[imaging.avif]
+  encoderSpeed = 8
+
+[imaging.webp]
+  useSharpYuv = true

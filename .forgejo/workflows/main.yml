@@ -9,27 +9,25 @@ jobs:
   build-deploy:
     runs-on: codeberg-tiny-lazy
     container:
-      # TODO: Instead of using a generic slim Debian image, should I create a custom image with
-      #       my required dependencies pre-installed?
-      image: debian:13.0-slim@sha256:c85a2732e97694ea77237c61304b3bb410e0e961dd6ee945997a06c788c545bb
+      image: ghcr.io/gohugoio/hugo:v0.164.0@sha256:630fef353bd10c5a23f909002d18dcdc031682375632a38d4fcfd20ad1e5441f
     steps:
-      - name: Setup
-        run: apt update && apt install hugo nodejs git ca-certificates --yes --no-install-recommends
-
-        # TODO: Can I replace this dependency on a Shared Action with direct calls to Git?
+      # TODO: Can I replace this dependency on a Shared Action with direct calls to Git?
       - name: Checkout
         uses: https://code.forgejo.org/actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
-      - name: Build
-        run: hugo --minify --logLevel info
-
-      - name: Deploy
+      - name: Configure Git
         run: |
+          git config --global --add safe.directory "${GITHUB_WORKSPACE:-$PWD}"
           git config --global user.name "actions[bot]"
           git config --global user.email "actions[bot]@example.com"
 
+      - name: Build
+        run: hugo --minify --gc --cleanDestinationDir --logLevel info
+
+      - name: Deploy
+        run: |
           TEMP_DIR=$(mktemp -d)
-          shopt -s dotglob
+          shopt -s dotglob # include dotfiles so e.g. .domains is copied
           cp -r public/* "$TEMP_DIR/"
           shopt -u dotglob
 
@@ -43,7 +41,7 @@ jobs:
           shopt -s dotglob
           cp -r "$TEMP_DIR"/* .
           shopt -u dotglob
-          
+
           rm -rf "$TEMP_DIR"
 
           git add .

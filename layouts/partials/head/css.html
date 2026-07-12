@@ -1,0 +1,7 @@
+{{ $logo := resources.Get "images/logo.svg" | resources.Minify | resources.Fingerprint }}
+{{ $vars := dict "logo-url" (printf "url('%s')" $logo.Permalink) }}
+{{ $opts := dict "minify" (not hugo.IsDevelopment) "vars" $vars }}
+{{ $css := resources.Get "css/main.css" | css.Build $opts }}
+<style>
+	{{ $css.Content | safeCSS }}
+</style>

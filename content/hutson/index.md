@@ -1,7 +1,7 @@
 ---
 title: Hutson Betts
 type: profile
-picture: hutson-profile.webp
+picture: hutson-profile.png
 bio: "Husband and father working in the software and systems infrastructure fields. On this profile page you will find links to projects I have worked on, my printed publications, any public talks I’ve given, and guides I adhere to in my work.
 
 
