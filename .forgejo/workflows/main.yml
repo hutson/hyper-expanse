@@ -1,5 +1,7 @@
 name: Pages
 
+enable-openid-connect: true
+
 on:
   push:
     branches:
@@ -9,14 +11,12 @@ on:
 jobs:
   build-deploy:
     runs-on: codeberg-tiny-lazy
-    permissions:
-      contents: write
     container:
-      image: ghcr.io/gohugoio/hugo:v0.164.0@sha256:630fef353bd10c5a23f909002d18dcdc031682375632a38d4fcfd20ad1e5441f
+      # TODO: Build and publish the Dev Container image to a registry so CI
+      # and local development both run from a single, versioned image instead
+      # of duplicating installation steps in this workflow.
+      image: docker.io/debian:trixie@sha256:d07d1b51c39f51188e60be9b64e6bf769fa94e187f092bc32b91305cfa34ba5a
     steps:
-      # TODO: Remove the third-party Shared Action dependency to reduce
-      # supply-chain risk and external availability coupling; replace with
-      # direct Git commands.
       - name: Checkout
         uses: https://code.forgejo.org/actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
@@ -26,17 +26,33 @@ jobs:
           git config --global user.name "actions[bot]"
           git config --global user.email "actions[bot]@example.com"
 
-      - name: Install WeasyPrint and Node.js
+      - name: Install system packages
         run: |
+          set -euf -o pipefail
           apt-get update
           apt-get install -y --no-install-recommends \
+            ca-certificates=20250419 \
+            curl=8.14.1-2+deb13u4 \
+            git=1:2.47.3-0+deb13u1 \
             nodejs=20.19.2+dfsg-1+deb13u2 \
             npm=9.2.0~ds1-3 \
+            python3=3.13.5-1 \
             weasyprint=62.3-1
           rm -rf /var/lib/apt/lists/*
 
+      - name: Install Hugo
+        run: |
+          set -euf -o pipefail
+          curl -sSL "https://github.com/gohugoio/hugo/releases/download/v0.164.0/hugo_extended_0.164.0_Linux-64bit.tar.gz" \
+            -o /tmp/hugo.tar.gz \
+            && echo "fea17b8c076f950bb2e9f9486667bdaa29422883888d509d63931c73e8a9b3a4  /tmp/hugo.tar.gz" | sha256sum --check --strict \
+            && tar -xzf /tmp/hugo.tar.gz -C /tmp \
+            && mv /tmp/hugo /usr/local/bin/hugo \
+            && rm /tmp/hugo.tar.gz
+
       - name: Install hadolint
         run: |
+          set -euf -o pipefail
           curl -sSL "https://github.com/hadolint/hadolint/releases/download/v2.12.0/hadolint-Linux-x86_64" \
             -o /usr/local/bin/hadolint \
             && echo "56de6d5e5ec427e17b74fa48d51271c7fc0d61244bf5c90e828aab8362d55010  /usr/local/bin/hadolint" | sha256sum --check --strict \
@@ -45,10 +61,34 @@ jobs:
       - name: Test
         run: bash .tools/test.sh
 
+      - name: Generate Forgejo JWT
+        if: forgejo.event_name == 'push'
+        id: forgejo-jwt
+        env:
+          AUD: ${{ vars.PAGES_AUDIENCE }}
+        run: |
+          set -euf -o pipefail
+          jwt=$(python3 - <<'PY'
+          import json, os, urllib.request
+          url = os.environ['ACTIONS_ID_TOKEN_REQUEST_URL'] + '&audience=' + os.environ['AUD']
+          req = urllib.request.Request(url, headers={'Authorization': 'bearer ' + os.environ['ACTIONS_ID_TOKEN_REQUEST_TOKEN']})
+          print(json.load(urllib.request.urlopen(req))['value'])
+          PY
+          )
+          echo "::add-mask::$jwt"
+          echo "jwt=$jwt" >> "$FORGEJO_OUTPUT"
+
       - name: Deploy
+        if: forgejo.event_name == 'push'
         env:
           DEPLOY_SHA: ${{ forgejo.sha }}
+          JWT: ${{ steps.forgejo-jwt.outputs.jwt }}
         run: |
+          set -euf -o pipefail
+
+          server="$(printf '%s' "${{ forgejo.server_url }}" | sed 's|^https://||')"
+          git remote set-url origin "https://x-access-token:${JWT}@${server}/${{ forgejo.repository }}.git"
+
           TEMP_DIR=$(mktemp -d)
           cp -R public/. "$TEMP_DIR/"
 
