@@ -17,15 +17,6 @@ jobs:
       # of duplicating installation steps in this workflow.
       image: docker.io/debian:trixie@sha256:d07d1b51c39f51188e60be9b64e6bf769fa94e187f092bc32b91305cfa34ba5a
     steps:
-      - name: Checkout
-        uses: https://code.forgejo.org/actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-
-      - name: Configure Git
-        run: |
-          git config --global --add safe.directory "${GITHUB_WORKSPACE:-$PWD}"
-          git config --global user.name "actions[bot]"
-          git config --global user.email "actions[bot]@example.com"
-
       - name: Install system packages
         run: |
           set -euf -o pipefail
@@ -39,6 +30,9 @@ jobs:
             python3=3.13.5-1 \
             weasyprint=62.3-1
           rm -rf /var/lib/apt/lists/*
+
+      - name: Checkout
+        uses: https://code.forgejo.org/actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Install Hugo
         run: |
