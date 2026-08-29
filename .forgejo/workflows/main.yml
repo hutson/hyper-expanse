@@ -80,6 +80,9 @@ jobs:
         run: |
           set -euf -o pipefail
 
+          git config --global user.name "automation"
+          git config --global user.email "automation@example.com"
+
           server="$(printf '%s' "${{ forgejo.server_url }}" | sed 's|^https://||')"
           git remote set-url origin "https://x-access-token:${JWT}@${server}/${{ forgejo.repository }}.git"
 
