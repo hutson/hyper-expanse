@@ -25,11 +25,15 @@ jobs:
             ca-certificates=20250419 \
             curl=8.14.1-2+deb13u4 \
             git=1:2.47.3-0+deb13u1 \
-            nodejs=20.19.2+dfsg-1+deb13u2 \
-            npm=9.2.0~ds1-3 \
             python3=3.13.5-1 \
             weasyprint=62.3-1
           rm -rf /var/lib/apt/lists/*
+
+          curl -fsSL "https://nodejs.org/dist/v20.19.2/node-v20.19.2-linux-x64.tar.xz" \
+            -o /tmp/node.tar.xz
+          echo "cbe59620b21732313774df4428586f7222a84af29e556f848abf624ba41caf90  /tmp/node.tar.xz" | sha256sum --check --strict
+          tar -xJf /tmp/node.tar.xz -C /usr/local --strip-components=1
+          rm /tmp/node.tar.xz
 
       - name: Checkout
         uses: https://code.forgejo.org/actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
