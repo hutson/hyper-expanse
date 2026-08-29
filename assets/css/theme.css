@@ -1,0 +1,63 @@
+@import 'hugo:vars';
+
+html {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+body {
+	background-color: #111215;
+	color: white;
+}
+
+a {
+	text-decoration: none;
+	color: lightblue;
+}
+
+h2 {
+	border-bottom: 2px solid currentcolor;
+	display: inline-block;
+}
+
+main {
+	margin: auto;
+	max-width: 700px;
+}
+
+nav {
+	align-items: center;
+	display: flex;
+	flex-wrap: wrap;
+	font-size: 1.25rem;
+	justify-content: space-between;
+	margin: 10px;
+}
+
+nav a,
+nav a:hover,
+nav a:focus {
+	color: white;
+}
+
+nav header img {
+	margin-right: 5px;
+	vertical-align: top !important;
+}
+
+@media screen and (prefers-color-scheme: light) {
+	body {
+		background-color: white;
+		color: black;
+	}
+
+	a {
+		text-decoration: none;
+		color: blue;
+	}
+
+	nav a,
+	nav a:hover,
+	nav a:focus {
+		color: black;
+	}
+}

@@ -44,7 +44,7 @@ Considered, but discarded, was the idea of using categories alongside label name
 
 When using categories, each label would consist of two parts, the category to which the label belongs, and a string consisting of additional human-understandable metadata.
 
-To separate the parts use `::<space>`, where there is a space after `::`.
+To separate the parts use `::` followed by a space, where there is a space after `::`.
 
 A colon, `::`, would not be used elsewhere in a label.
 
@@ -52,6 +52,6 @@ As an example: `type::defect`
 
 However, after consistent real-world usage, categories simply introduced another layer of complexity to labels, without directly addressing discoverability. At the point you knew which category a label belonged to, you knew which label you needed.
 
-# Terminology
+## Terminology
 
-The key words _MUST_, _MUST NOT_, _REQUIRED_, _SHALL_, _SHALL NOT_, _SHOULD_, _SHOULD NOT_, _RECOMMENDED_, _MAY_, and _OPTIONAL_ in this document are to be interpreted as described in [RFC 21191](https://tools.ietf.org/html/rfc2119).
+The key words _MUST_, _MUST NOT_, _REQUIRED_, _SHALL_, _SHALL NOT_, _SHOULD_, _SHOULD NOT_, _RECOMMENDED_, _MAY_, and _OPTIONAL_ in this document are to be interpreted as described in [RFC 2119](https://tools.ietf.org/html/rfc2119).

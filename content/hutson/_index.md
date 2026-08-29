@@ -1,4 +1,4 @@
 ---
-title: {{ .Name }}
+title: Hutson Betts
 type: profile
 ---

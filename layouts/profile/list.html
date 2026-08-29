@@ -1,0 +1,102 @@
+{{ define "main" }}
+
+{{ $hutson := hugo.Data.hutson | default dict }}
+{{ $contact := $hutson.contact | default dict }}
+{{ $src := resources.Get (printf "images/%s" $hutson.picture) }}
+
+<section id="profile">
+	<h1>{{ $hutson.name }}</h1>
+	<ul class="tabs" role="tablist">
+		<li role="presentation">
+			<a role="tab" href="/hutson/"{{ if eq .RelPermalink "/hutson/" }} aria-current="page"{{ end }}>About</a>
+		</li>
+		<li role="presentation">
+			<a role="tab" href="/hutson/resume/"{{ if eq .RelPermalink "/hutson/resume/" }} aria-current="page"{{ end }}>Resume</a>
+		</li>
+	</ul>
+	{{ with $src }}
+	{{ $webp := $src.Process "resize 200x200 webp q98 hint picture" }}
+	{{ $avif := $src.Process "resize 200x200 avif q98 hint picture" }}
+	<picture>
+		<source srcset="{{ $avif.RelPermalink }}" type="{{ $avif.MediaType.Type }}">
+		<source srcset="{{ $webp.RelPermalink }}" type="{{ $webp.MediaType.Type }}">
+		<img src="{{ $src.RelPermalink }}" alt="Profile picture of {{ $hutson.name }}" width="200" height="200">
+	</picture>
+	{{ end }}
+	{{ with $hutson.description_personal }}<p>{{ . }}</p>{{ end }}
+	{{ with $hutson.description_professional }}<p>{{ . }}</p>{{ end }}
+	{{ partial "contact.html" $contact }}
+</section>
+
+{{ with $hutson.projects }}
+{{ $active := where . "status" "active" }}
+{{ $past := where . "status" "past" }}
+{{ with $active }}
+<section>
+	<h2>Active Projects</h2>
+	{{ range . }}
+	<section>
+		<h3>{{ .title }}</h3>
+		{{ .description | markdownify }}
+		<p><b>→</b> <a href="{{ .repository }}">{{ .title }}</a></p>
+	</section>
+	{{ end }}
+</section>
+{{ end }}
+{{ with $past }}
+<section>
+	<h2>Past Projects</h2>
+	{{ range . }}
+	<section>
+		<h3>{{ .title }}</h3>
+		{{ .description | markdownify }}
+		<p><b>→</b> <a href="{{ .repository }}">{{ .title }}</a></p>
+	</section>
+	{{ end }}
+</section>
+{{ end }}
+{{ end }}
+
+{{ with $hutson.contributions }}
+<section>
+	<h2>Projects Where I Contribute</h2>
+	{{ range . }}
+	<section>
+		<h3>{{ .title }}</h3>
+		{{ .description | markdownify }}
+		<p><b>→</b> <a href="{{ .url }}">{{ .title }}</a></p>
+	</section>
+	{{ end }}
+</section>
+{{ end }}
+
+{{ with $hutson.publications }}
+<section>
+	<h2>My Publications</h2>
+	{{ range . }}
+	<section>
+		<h3>{{ .title }} - {{ .subtitle }}</h3>
+		{{ .description | markdownify }}
+		<p><b>→</b> <a href="{{ .shop }}">Purchase printed copy of {{ .title }} - {{ .subtitle }}</a></p>
+	</section>
+	{{ end }}
+</section>
+{{ end }}
+
+<section>
+	<h2>Guides I've Written</h2>
+	{{ range where (where site.RegularPages "Type" "guide") "Draft" false }}
+	<p><b>→</b> <a href="{{ .Permalink }}">{{ .Title }}</a></p>
+	{{ end }}
+</section>
+
+{{ with $hutson.sponsor }}
+<section>
+	<h2>How to Sponsor Me</h2>
+	{{ range . }}
+	<p><b>→</b> <a href="{{ .url }}">{{ .text }}</a></p>
+	{{ end }}
+</section>
+{{ end }}
+
+{{ end }}

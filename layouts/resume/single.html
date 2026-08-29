@@ -1,0 +1,132 @@
+{{ define "main" }}
+
+{{ $hutson := hugo.Data.hutson | default dict }}
+{{ $contact := $hutson.contact | default dict }}
+
+<section id="resume">
+	<header>
+		<h1>{{ $hutson.name }}</h1>
+		<ul class="tabs" role="tablist">
+			<li role="presentation">
+				<a role="tab" href="/hutson/"{{ if eq .RelPermalink "/hutson/" }} aria-current="page"{{ end }}>About</a>
+			</li>
+			<li role="presentation">
+				<a role="tab" href="/hutson/resume/"{{ if eq .RelPermalink "/hutson/resume/" }} aria-current="page"{{ end }}>Resume</a>
+			</li>
+		</ul>
+		{{ with $hutson.employment }}
+		{{ with index . 0 }}
+		{{ $employer := .company }}
+		{{ with $hutson.title }}
+		<p class="subtitle">{{ . }} @ {{ $employer }}</p>
+		{{ else }}
+		<p class="subtitle">{{ $employer }}</p>
+		{{ end }}
+		{{ end }}
+		{{ end }}
+	</header>
+
+	{{ with $hutson.description_professional }}
+	<section class="summary">
+		<p>{{ . }}</p>
+		{{ partial "contact.html" $contact }}
+	</section>
+	{{ end }}
+
+	{{ with $hutson.skills }}
+	<section class="skills">
+		<h2>Skills</h2>
+		<div class="skill-columns">
+		{{ range . }}
+		<section>
+			<h3>{{ .category }}</h3>
+			<ul>
+				{{ range .items }}
+				<li>{{ . }}</li>
+				{{ end }}
+			</ul>
+		</section>
+		{{ end }}
+		</div>
+	</section>
+	{{ end }}
+
+	{{ with $hutson.projects }}
+	{{ $active := where . "status" "active" }}
+	{{ with $active }}
+	<section class="projects">
+		<h2>Active Projects</h2>
+		{{ range . }}
+		<article>
+			<header>
+				<h3>{{ .title }}</h3>
+			</header>
+			{{ with .description }}
+			<p>{{ . }}</p>
+			{{ end }}
+			<p><b>→</b> <a href="{{ .repository }}">{{ .repository }}</a></p>
+		</article>
+		{{ end }}
+	</section>
+	{{ end }}
+	{{ end }}
+
+	{{ with $hutson.employment }}
+	<section class="experience">
+		<h2>Experience</h2>
+		{{ range . }}
+		<article>
+			<header>
+				{{ if .website }}
+				<h3><a href="{{ .website }}">{{ .company }}</a> — {{ .title }}</h3>
+				{{ else }}
+				<h3>{{ .company }} — {{ .title }}</h3>
+				{{ end }}
+				<p class="subtitle">
+					<time>{{ .start }}</time> – <time>{{ .end }}</time>
+				</p>
+			</header>
+			{{ range .roles }}
+			{{ if .start }}
+			<p class="role-dates">
+				<time>{{ .start }}</time> – <time>{{ .end }}</time>
+			</p>
+			{{ end }}
+			<ul>
+				{{ range .contributions }}
+				<li>{{ . }}</li>
+				{{ end }}
+			</ul>
+			{{ end }}
+		</article>
+		{{ end }}
+	</section>
+	{{ end }}
+
+	{{ with $hutson.education }}
+	<section class="education">
+		<h2>Education</h2>
+		{{ range . }}
+		<article>
+			<header>
+				<h3>{{ .school }}</h3>
+				<p class="subtitle">
+					<time>{{ .start }}</time> – <time>{{ .end }}</time>
+				</p>
+			</header>
+			{{ with .details }}
+			<p>{{ . }}</p>
+			{{ end }}
+		</article>
+		{{ end }}
+	</section>
+	{{ end }}
+
+	<section class="download">
+		<p><a href="/hutson/resume.pdf">Download as PDF</a></p>
+	</section>
+
+	{{ .Content }}
+</section>
+
+{{ end }}

@@ -4,14 +4,19 @@ on:
   push:
     branches:
       - main
+  pull_request:
 
 jobs:
   build-deploy:
     runs-on: codeberg-tiny-lazy
+    permissions:
+      contents: write
     container:
       image: ghcr.io/gohugoio/hugo:v0.164.0@sha256:630fef353bd10c5a23f909002d18dcdc031682375632a38d4fcfd20ad1e5441f
     steps:
-      # TODO: Can I replace this dependency on a Shared Action with direct calls to Git?
+      # TODO: Remove the third-party Shared Action dependency to reduce
+      # supply-chain risk and external availability coupling; replace with
+      # direct Git commands.
       - name: Checkout
         uses: https://code.forgejo.org/actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
@@ -21,10 +26,28 @@ jobs:
           git config --global user.name "actions[bot]"
           git config --global user.email "actions[bot]@example.com"
 
-      - name: Build
-        run: hugo --minify --gc --cleanDestinationDir --logLevel info
+      - name: Install WeasyPrint and Node.js
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends \
+            nodejs=20.19.2+dfsg-1+deb13u2 \
+            npm=9.2.0~ds1-3 \
+            weasyprint=62.3-1
+          rm -rf /var/lib/apt/lists/*
+
+      - name: Install hadolint
+        run: |
+          curl -sSL "https://github.com/hadolint/hadolint/releases/download/v2.12.0/hadolint-Linux-x86_64" \
+            -o /usr/local/bin/hadolint \
+            && echo "56de6d5e5ec427e17b74fa48d51271c7fc0d61244bf5c90e828aab8362d55010  /usr/local/bin/hadolint" | sha256sum --check --strict \
+            && chmod +x /usr/local/bin/hadolint
+
+      - name: Test
+        run: bash .tools/test.sh
 
       - name: Deploy
+        env:
+          DEPLOY_SHA: ${{ forgejo.sha }}
         run: |
           TEMP_DIR=$(mktemp -d)
           cp -R public/. "$TEMP_DIR/"
@@ -41,6 +64,6 @@ jobs:
           rm -rf "$TEMP_DIR"
 
           git add .
-          git commit -m "Deploy site from commit ${{ github.sha }}"
+          git commit -m "Deploy site from commit ${DEPLOY_SHA}"
 
           git push origin pages

@@ -1,0 +1,15 @@
+{
+  "extends": [
+    "html-validate:standard",
+    "html-validate:document",
+    "html-validate:a11y"
+  ],
+  "rules": {
+    "no-trailing-whitespace": "error",
+    "void-style": "error",
+    "no-inline-style": "error",
+    "attr-quotes": "error",
+    "doctype-style": ["error", { "style": "lowercase" }],
+    "no-raw-characters": ["error", { "relaxed": true }]
+  }
+}

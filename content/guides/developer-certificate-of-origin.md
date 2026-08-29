@@ -46,7 +46,7 @@ Therefore, an explicit sign-off protects the project by ensuring there's evidenc
 
 ## An Alternative to Contributor License Agreement
 
-As pointed out by Richard Fontana in his article, [_CLA Problems_](https://opensource.com/article/19/2/cla-problems), there are arguments in favor of Contributor License Agreements. Those arguments, however, may not be fully justified, and the cost of enforcing a CLA may out weight any value from the risk mitigated by that CLA.
+As pointed out by Richard Fontana in his article, [_CLA Problems_](https://opensource.com/article/19/2/cla-problems), there are arguments in favor of Contributor License Agreements. Those arguments, however, may not be fully justified, and the cost of enforcing a CLA may outweigh any value from the risk mitigated by that CLA.
 
 ## Other Users of DCO
 

@@ -22,3 +22,13 @@ enableGitInfo = true
 
 [imaging.webp]
   useSharpYuv = true
+
+# Keep attribute quotes during HTML minification so html-validate's `attr-quotes`
+# rule can be enabled without requiring every template to pre-quote attributes.
+[minify.tdewolff.html]
+  keepQuotes = true
+
+# Use CSS classes for syntax highlighting so code blocks don't emit inline
+# styles, which `html-validate`'s `no-inline-style` rule would flag.
+[markup.highlight]
+  noClasses = false

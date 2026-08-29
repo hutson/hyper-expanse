@@ -5,11 +5,12 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'">
 	<title>{{ .Title }}</title>
 	{{ with site.Home.OutputFormats.Get "rss" }}
 		<link rel="alternate" type="application/rss+xml" title="{{ site.Title }}" href="{{ .RelPermalink }}">
 	{{ end }}
-	<link rel="icon" type="image/svg+xml" href="{{ $logo.Permalink }}" sizes="any">
+	<link rel="icon" type="image/svg+xml" href="{{ $logo.RelPermalink }}" sizes="any">
 	{{ partial "head/css.html" . }}
 </head>
 <body>
@@ -17,16 +18,14 @@
 	<nav>
 		<header>
 			<a href="/">
-				<img src="{{ $logo.Permalink }}" width="30" height="30" alt="hyper-expanse">{{ site.Title }}
+				<img src="{{ $logo.RelPermalink }}" width="30" height="30" alt="hyper-expanse">{{ site.Title }}
 			</a>
 		</header>
 	</nav>
 	{{ end }}
 
-	<main>
-	{{ block "main" . }}
-	<!-- The part of the page that begins to differ between templates -->
-	{{ end }}
+	<main{{ if .IsHome }} class="home"{{ end }}>
+	{{ block "main" . }}{{ end }}
 	</main>
 </body>
 

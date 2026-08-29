@@ -1,0 +1,26 @@
+{
+	"build": {
+		"dockerfile": "Containerfile",
+		"context": "..",
+		"args": {
+			"USER_UID": "${localEnv:DEVCONTAINER_UID:1000}",
+			"USER_GID": "${localEnv:DEVCONTAINER_GID:1000}"
+		}
+	},
+	"workspaceFolder": "/workspace",
+	"workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached,Z",
+	"remoteUser": "vscode",
+	"customizations": {
+		"vscode": {
+			"settings": {
+				"terminal.integrated.profiles.linux": {
+					"bash (login)": {
+						"path": "bash",
+						"args": ["-l"]
+					}
+				},
+				"terminal.integrated.defaultProfile.linux": "bash (login)"
+			}
+		}
+	}
+}
