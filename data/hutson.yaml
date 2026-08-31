@@ -59,10 +59,10 @@ projects:
       Personal shell scripts and development environment configuration files.
     repository: https://codeberg.org/hutson/dotfiles
     status: active
-  - title: hyper-expanse.github.io
+  - title: hyper-expanse
     description: |-
-      This website.
-    repository: https://codeberg.org/hutson/pages
+      Code and content behind my personal website.
+    repository: https://codeberg.org/hutson/hyper-expanse
     status: active
   - title: dayone-to-joplin
     description: |-
