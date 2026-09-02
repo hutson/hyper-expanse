@@ -2,6 +2,9 @@
 draft: false
 title: "Developer Certificate of Origin"
 type: guide
+tag: professional
+aliases:
+  - /guides/developer-certificate-of-origin/
 ---
 
 # Developer Certificate of Origin

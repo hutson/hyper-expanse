@@ -1,0 +1,56 @@
+{{ define "main" }}
+
+{{ $hutson := hugo.Data.hutson | default dict }}
+
+<section id="projects">
+	<h1>{{ .Title }}</h1>
+	{{ with .Content }}{{ . }}{{ end }}
+	{{ with $hutson.projects }}
+	{{ $own := where . "kind" "!=" "contributed" }}
+	{{ $contributed := where . "kind" "contributed" }}
+	{{ $ownActive := where $own "status" "active" }}
+	{{ $ownPast := where $own "status" "past" }}
+{{ with $ownActive }}
+<section>
+	<h2>Active Projects</h2>
+	<div class="project-columns">
+		{{ range . }}
+		<section>
+			<h3>{{ .title }}</h3>
+			{{ .description | markdownify }}
+			{{ with .repository }}<p><b>→</b> <a href="{{ . }}">{{ . }}</a></p>{{ end }}
+		</section>
+		{{ end }}
+	</div>
+</section>
+{{ end }}
+{{ with $ownPast }}
+<section>
+	<h2>Past Projects</h2>
+	<div class="project-columns">
+		{{ range . }}
+		<section>
+			<h3>{{ .title }}</h3>
+			{{ .description | markdownify }}
+			{{ with .repository }}<p><b>→</b> <a href="{{ . }}">{{ . }}</a></p>{{ end }}
+		</section>
+		{{ end }}
+	</div>
+</section>
+{{ end }}
+	{{ with $contributed }}
+	<section>
+		<h2>Projects Where I Contribute</h2>
+		{{ range . }}
+		<section>
+			<h3>{{ .title }}</h3>
+			{{ .description | markdownify }}
+			{{ with .url }}<p><b>→</b> <a href="{{ . }}">{{ . }}</a></p>{{ end }}
+		</section>
+		{{ end }}
+	</section>
+	{{ end }}
+	{{ end }}
+</section>
+
+{{ end }}

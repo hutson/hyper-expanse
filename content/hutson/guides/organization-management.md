@@ -2,6 +2,9 @@
 draft: true
 title: "GitHub Organization Management"
 type: guide
+tag: professional
+aliases:
+  - /guides/organization-management/
 ---
 
 # GitHub Organization Management

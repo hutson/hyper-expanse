@@ -1,0 +1,13 @@
+{{ define "main" }}
+
+<section id="guides">
+	<h1>{{ .Title }}</h1>
+	{{ with .Content }}{{ . }}{{ end }}
+	<ul>
+		{{ range where (where .Pages "Type" "guide") "Draft" false }}
+		<li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+		{{ end }}
+	</ul>
+</section>
+
+{{ end }}

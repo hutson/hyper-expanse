@@ -1,0 +1,15 @@
+{{ $contact := .contact | default dict }}
+{{ $follow := .follow | default slice }}
+{{ $sponsor := .sponsor | default slice }}
+
+<ul class="connections">
+	{{ with $contact.linkedin }}
+	<li><a href="{{ . }}">LinkedIn</a></li>
+	{{ end }}
+	{{ range $follow }}
+	<li><a href="{{ .url }}">{{ .text }}</a></li>
+	{{ end }}
+	{{ range $sponsor }}
+	<li><a href="{{ .url }}">{{ .text }}</a></li>
+	{{ end }}
+</ul>

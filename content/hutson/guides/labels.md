@@ -2,6 +2,9 @@
 draft: false
 title: "Labels"
 type: guide
+tag: professional
+aliases:
+  - /guides/labels/
 ---
 
 # Labels

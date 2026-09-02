@@ -6,12 +6,14 @@
   "scripts": {
     "test:html": "html-validate \"public/**/*.html\"",
     "test:css": "stylelint \"assets/css/**/*.css\"",
-    "test:a11y": "node .tools/audit-a11y.js"
+    "test:a11y": "node .tools/audit-a11y.js",
+    "check:profiles": "node .tools/check-profiles.js"
   },
   "devDependencies": {
     "html-validate": "^9.7.1",
+    "jsdom": "^27.0.0",
     "stylelint": "^16.25.0",
     "stylelint-config-standard": "^39.0.1",
-    "jsdom": "^27.0.0"
+    "yaml": "^2.9.0"
   }
 }

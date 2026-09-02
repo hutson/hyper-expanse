@@ -1,56 +1,62 @@
 @import 'theme.css';
 
-.tabs {
-	border-bottom: 1px solid white;
-	display: flex;
-	flex-wrap: wrap;
-	gap: 0.25rem;
-	justify-content: center;
-	list-style: none;
-	margin: 0 0 1rem;
-	padding: 0 0 0 0.5rem;
-}
-
-.tabs a {
+.skip-link {
+	background-color: white;
 	border: 1px solid currentcolor;
-	border-bottom: none;
-	border-radius: 0.5rem 0.5rem 0 0;
-	color: white;
-	display: inline-block;
-	padding: 0.25rem 0.75rem;
-	position: relative;
-}
-
-.tabs a[aria-current="page"] {
-	background-color: white;
+	border-radius: 0.25rem;
 	color: #111215;
-}
-
-.tabs a[aria-current="page"]::after {
-	background-color: white;
-	bottom: -1px;
-	content: "";
-	height: 1px;
-	left: 0;
+	left: 0.5rem;
+	padding: 0.25rem 0.5rem;
 	position: absolute;
-	right: 0;
+	top: 0.5rem;
+	transform: translateY(-200%);
+	transition: transform 0.1s;
+	z-index: 10;
 }
 
-.contact {
+.skip-link:focus,
+.skip-link:focus-visible {
+	transform: translateY(0);
+}
+
+nav ul {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 0.25rem 1rem;
 	list-style: none;
+	margin: 0;
 	padding: 0;
 }
 
-.contact li::after {
+nav a[aria-current="page"] {
+	border-bottom: 3px solid currentcolor;
+}
+
+.connections {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.25rem 1rem;
+	justify-content: center;
+	list-style: none;
+	padding: 0;
+}
+
+.connections li::after {
 	content: " ·";
 	margin-left: 0.5rem;
 }
 
-.contact li:last-child::after {
+.connections li:last-child::after {
 	content: "";
+}
+
+.connections a {
+	color: #A8D8FF;
+}
+
+.connections a:hover,
+.connections a:focus {
+	border-bottom: 1px solid currentcolor;
 }
 
 #profile {
@@ -138,22 +144,53 @@
 	padding-left: 1.1rem;
 }
 
+#articles,
+#guides {
+	text-align: justify;
+}
+
+#projects h1,
+#publications h1,
+#articles h1,
+#guides h1 {
+	margin-top: 0;
+}
+
+#projects section,
+#publications section,
+#articles section,
+#guides section {
+	margin-bottom: 1.5rem;
+}
+
+#projects h2,
+#publications h2 {
+	border-bottom: 1px solid currentcolor;
+	padding-bottom: 0.25rem;
+}
+
+#projects .project-columns {
+	display: grid;
+	gap: 1rem 1.5rem;
+	grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+}
+
+#projects .project-columns h3 {
+	margin-top: 0;
+}
+
+#projects .project-columns section {
+	margin-bottom: 0;
+}
+
 @media screen and (prefers-color-scheme: light) {
-	.tabs {
-		border-bottom-color: black;
-	}
-
-	.tabs a {
-		color: black;
-	}
-
-	.tabs a[aria-current="page"] {
+	.skip-link {
 		background-color: black;
 		color: white;
 	}
 
-	.tabs a[aria-current="page"]::after {
-		background-color: black;
+	.connections a {
+		color: #0056B3;
 	}
 }
 
@@ -167,6 +204,7 @@
 
 @media print {
 	nav,
+	.skip-link,
 	#resume .download {
 		display: none;
 	}

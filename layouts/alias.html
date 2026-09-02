@@ -1,0 +1,18 @@
+{{/* Overrides Hugo's built-in alias page to include lang, viewport, and a
+canonical link, and to satisfy the offline html-validate checks. */}}
+<!DOCTYPE html>
+<html lang="{{ site.Language.Locale }}">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="robots" content="noindex">
+	<title>{{ .Title }}</title>
+	<link rel="canonical" href="{{ .Permalink }}">
+	<meta http-equiv="refresh" content="0; url={{ .Permalink }}">
+</head>
+<body>
+	<main>
+		<p><a href="{{ .Permalink }}">{{ .Title }}</a></p>
+	</main>
+</body>
+</html>

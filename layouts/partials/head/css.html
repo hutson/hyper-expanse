@@ -1,7 +1,10 @@
 {{ $logo := resources.Get "images/logo.svg" | resources.Minify | resources.Fingerprint }}
-{{ $logoData := printf "data:image/svg+xml;base64,%s" ($logo.Content | base64Encode) }}
-{{ $vars := dict "logo-url" (printf "url('%s')" $logoData) }}
-{{ $opts := dict "minify" (not hugo.IsDevelopment) "vars" $vars }}
+{{ $opts := dict "minify" (not hugo.IsDevelopment) }}
+{{ if .IsHome }}
+	{{ $logoData := printf "data:image/svg+xml;base64,%s" ($logo.Content | base64Encode) }}
+	{{ $vars := dict "logo-url" (printf "url('%s')" $logoData) }}
+	{{ $opts = dict "minify" (not hugo.IsDevelopment) "vars" $vars }}
+{{ end }}
 {{ $cssFile := "css/profile.css" }}
 {{ if .IsHome }}{{ $cssFile = "css/main.css" }}{{ end }}
 {{ $css := resources.Get $cssFile | css.Build $opts }}

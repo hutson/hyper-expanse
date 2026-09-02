@@ -15,16 +15,31 @@
 </head>
 <body>
 	{{ if not .IsHome }}
-	<nav>
+	<a class="skip-link" href="#main">Skip to content</a>
+	<nav aria-label="Main">
 		<header>
 			<a href="/">
-				<img src="{{ $logo.RelPermalink }}" width="30" height="30" alt="hyper-expanse">{{ site.Title }}
+				<img src="{{ $logo.RelPermalink }}" width="35" height="35" alt="hyper-expanse">{{ site.Title }}
 			</a>
 		</header>
+		{{ $articles := site.GetPage "hutson/articles" }}
+		{{/* Hide the Articles nav item until at least one article is published,
+		so the nav never links to an empty list page. */}}
+		{{ $hasArticles := and $articles (gt (len (where $articles.Pages "Draft" false)) 0) }}
+		<ul>
+			<li><a href="/hutson/"{{ if eq .RelPermalink "/hutson/" }} aria-current="page"{{ end }}>About</a></li>
+			<li><a href="/hutson/resume/"{{ if eq .RelPermalink "/hutson/resume/" }} aria-current="page"{{ end }}>Resume</a></li>
+			<li><a href="/hutson/projects/"{{ if eq .RelPermalink "/hutson/projects/" }} aria-current="page"{{ end }}>Projects</a></li>
+			<li><a href="/hutson/publications/"{{ if eq .RelPermalink "/hutson/publications/" }} aria-current="page"{{ end }}>Publications</a></li>
+			<li><a href="/hutson/guides/"{{ if eq .RelPermalink "/hutson/guides/" }} aria-current="page"{{ end }}>Guides</a></li>
+			{{ if $hasArticles }}
+			<li><a href="{{ $articles.RelPermalink }}"{{ if eq .RelPermalink $articles.RelPermalink }} aria-current="page"{{ end }}>Articles</a></li>
+			{{ end }}
+		</ul>
 	</nav>
 	{{ end }}
 
-	<main{{ if .IsHome }} class="home"{{ end }}>
+	<main id="main"{{ if .IsHome }} class="home"{{ end }}>
 	{{ block "main" . }}{{ end }}
 	</main>
 </body>

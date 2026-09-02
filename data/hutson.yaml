@@ -54,46 +54,58 @@ skills:
 
 projects:
   # status must be either "active" or "past"; templates filter on this value.
+  # tag must be either "personal" or "professional" (default "personal").
+  # Only "professional" projects surface on the resume page and PDF.
+  # kind: "contributed" marks projects I contribute to but don't own;
+  # layouts/projects/list.html renders these under "Projects Where I Contribute".
   - title: dotfiles
     description: |-
       Personal shell scripts and development environment configuration files.
     repository: https://codeberg.org/hutson/dotfiles
     status: active
+    tag: personal
   - title: hyper-expanse
     description: |-
       Code and content behind my personal website.
     repository: https://codeberg.org/hutson/hyper-expanse
     status: active
+    tag: personal
   - title: dayone-to-joplin
     description: |-
       Import a Day One JSON export into the Joplin note-taking application with all journal entries and photos.
     repository: https://codeberg.org/hutson/dayone-to-joplin
     status: past
+    tag: personal
   - title: "@hutson/parse-repository-url"
     description: |-
       Parse repository URLs to extract, SCM platform, domain, user, and project information.
     repository: https://codeberg.org/hutson/parse-repository-url
     status: past
+    tag: professional
   - title: "@hutson/semantic-delivery-gitlab"
     description: |-
       Automatically generate a deliverable, along with a corresponding git tag, for GitLab-hosted source code.
     repository: https://codeberg.org/hutson/semantic-delivery-gitlab
     status: past
+    tag: professional
   - title: "@hutson/npm-deploy-git-tag"
     description: |-
       Deploy a package to an npm-compatible registry using the latest git tag from that package's repository.
     repository: https://codeberg.org/hutson/npm-deploy-git-tag
     status: past
+    tag: professional
   - title: "@hutson/set-npm-auth-token-for-ci"
     description: |-
       Set authentication token placeholder into `.npmrc` file for use in automated CI processes.
     repository: https://codeberg.org/hutson/set-npm-auth-token-for-ci
     status: past
+    tag: professional
   - title: "@hutson/conventional-changelog-config"
     description: |-
       Standard conventional-changelog configuration as used by projects maintained by Hutson Betts (@hutson).
     repository: https://codeberg.org/hutson/conventional-changelog-config
     status: past
+    tag: professional
 
 employment:
   - company: FactSet Research Systems
@@ -193,12 +205,6 @@ employment:
 #     start: 2008
 #     end: 2010
 #     details: B.S. in Computer Science
-
-contributions:
-  - title: Conventional Commits
-    description: |-
-      Organization devoted to developing a commit message convention for consumption by developer tooling.
-    url: https://github.com/conventional-commits
 
 publications:
   - title: Pepper and Carrot

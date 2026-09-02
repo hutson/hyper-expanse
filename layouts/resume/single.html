@@ -1,19 +1,22 @@
 {{ define "main" }}
 
 {{ $hutson := hugo.Data.hutson | default dict }}
-{{ $contact := $hutson.contact | default dict }}
+
+{{/* Only professional-tagged content may appear on this page: .tools/build.sh
+renders it to /hutson/resume.pdf unchanged. */}}
+{{ $professionalProjects := where $hutson.projects "tag" "professional" }}
+{{ $professionalGuides := slice }}
+{{ $professionalArticles := slice }}
+{{ with site.GetPage "hutson/guides" }}
+	{{ $professionalGuides = where (where .Pages "Type" "guide") "Params.tag" "professional" }}
+{{ end }}
+{{ with site.GetPage "hutson/articles" }}
+	{{ $professionalArticles = where .Pages "Params.tag" "professional" }}
+{{ end }}
 
 <section id="resume">
 	<header>
 		<h1>{{ $hutson.name }}</h1>
-		<ul class="tabs" role="tablist">
-			<li role="presentation">
-				<a role="tab" href="/hutson/"{{ if eq .RelPermalink "/hutson/" }} aria-current="page"{{ end }}>About</a>
-			</li>
-			<li role="presentation">
-				<a role="tab" href="/hutson/resume/"{{ if eq .RelPermalink "/hutson/resume/" }} aria-current="page"{{ end }}>Resume</a>
-			</li>
-		</ul>
 		{{ with $hutson.employment }}
 		{{ with index . 0 }}
 		{{ $employer := .company }}
@@ -28,8 +31,9 @@
 
 	{{ with $hutson.description_professional }}
 	<section class="summary">
+		<h2>Summary</h2>
 		<p>{{ . }}</p>
-		{{ partial "contact.html" $contact }}
+		{{ partial "connections.html" $hutson }}
 	</section>
 	{{ end }}
 
@@ -51,11 +55,9 @@
 	</section>
 	{{ end }}
 
-	{{ with $hutson.projects }}
-	{{ $active := where . "status" "active" }}
-	{{ with $active }}
+	{{ with $professionalProjects }}
 	<section class="projects">
-		<h2>Active Projects</h2>
+		<h2>Selected Projects</h2>
 		{{ range . }}
 		<article>
 			<header>
@@ -64,11 +66,37 @@
 			{{ with .description }}
 			<p>{{ . }}</p>
 			{{ end }}
-			<p><b>→</b> <a href="{{ .repository }}">{{ .repository }}</a></p>
+			{{ with .repository }}<p><b>→</b> <a href="{{ . }}">{{ . }}</a></p>{{ end }}
+			{{ with .url }}<p><b>→</b> <a href="{{ . }}">{{ . }}</a></p>{{ end }}
 		</article>
 		{{ end }}
 	</section>
 	{{ end }}
+
+	{{ with $professionalArticles }}
+	<section class="articles">
+		<h2>Articles</h2>
+		<ul>
+			{{ range . }}
+			<li><a href="{{ .RelPermalink }}">{{ .Title }}</a> — <time>{{ .Date.Format "January 2, 2006" }}</time></li>
+			{{ end }}
+		</ul>
+	</section>
+	{{ end }}
+
+	{{ with $professionalGuides }}
+	<section class="guides">
+		<h2>Guides</h2>
+		<ul>
+			{{ range . }}
+		<li>
+			<a href="{{ .RelPermalink }}">{{ .Title }}</a>
+				{{ $date := or .Lastmod .Date }}
+				{{ if not $date.IsZero }} — <time>{{ $date.Format "January 2, 2006" }}</time>{{ end }}
+			</li>
+			{{ end }}
+		</ul>
+	</section>
 	{{ end }}
 
 	{{ with $hutson.employment }}

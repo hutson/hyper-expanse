@@ -2,6 +2,9 @@
 draft: true
 title: "Continuous Pipeline"
 type: guide
+tag: professional
+aliases:
+  - /guides/continuous-pipeline/
 ---
 
 Applying the concepts of _Continuous Integration_, _Continuous Delivery_, _Continuous Deployment_, and _Continuous Release_ to shipping code in the Node/npm ecosystem.

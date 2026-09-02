@@ -1,0 +1,18 @@
+{{ define "main" }}
+
+<section id="articles">
+	<h1>{{ .Title }}</h1>
+	{{ with .Content }}{{ . }}{{ end }}
+	{{ $pages := where .Pages "Draft" false }}
+	{{ if eq (len $pages) 0 }}
+	<p>No articles yet.</p>
+	{{ else }}
+	<ul>
+		{{ range $pages.ByTitle }}
+		<li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+		{{ end }}
+	</ul>
+	{{ end }}
+</section>
+
+{{ end }}

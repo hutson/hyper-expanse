@@ -150,6 +150,47 @@ function auditHtml(file, html) {
 		issues.push({ rule: "landmark-main", message: "Page is missing a <main> landmark" });
 	}
 
+	// Check: in-page fragment links resolve to an existing element id.
+	for (const a of document.querySelectorAll('a[href^="#"]')) {
+		const href = a.getAttribute("href");
+		if (href === "#" || href.length <= 1) {
+			continue;
+		}
+		const id = href.slice(1);
+		if (!document.getElementById(id)) {
+			issues.push({
+				rule: "fragment-target",
+				message: `<a href="${href}"> target element with id "${id}" not found`,
+			});
+		}
+	}
+
+	// Check: alias redirect pages have a valid refresh target that resolves
+	// to an existing file and matches the canonical link.
+	const refresh = document.querySelector('meta[http-equiv="refresh"]');
+	if (refresh) {
+		const content = refresh.getAttribute("content") || "";
+		const match = /url=(.+)$/.exec(content);
+		const targetUrl = match ? match[1].trim().replace(/^['"]|['"]$/g, "") : "";
+		if (targetUrl) {
+			const targetPath = resolvePublicFilePath(targetUrl);
+			if (targetPath && !publicFileExists(targetPath)) {
+				issues.push({
+					rule: "alias-target",
+					message: `Meta refresh target "${targetUrl}" does not resolve to a generated file`,
+				});
+			}
+			const canonical = document.querySelector('link[rel="canonical"]');
+			const canonicalHref = canonical ? canonical.getAttribute("href") : "";
+			if (canonicalHref !== targetUrl) {
+				issues.push({
+					rule: "alias-canonical",
+					message: `Meta refresh target "${targetUrl}" does not match canonical "${canonicalHref}"`,
+				});
+			}
+		}
+	}
+
 	// Check: color contrast for text elements.
 	for (const el of document.querySelectorAll("p, li, h1, h2, h3, h4, h5, h6, a, span, td, th, dt, dd")) {
 		const style = window.getComputedStyle(el);
@@ -169,6 +210,42 @@ function auditHtml(file, html) {
 	}
 
 	return issues;
+}
+
+// Map a URL to a path under PUBLIC_DIR. Returns null for non-file URLs.
+function resolvePublicFilePath(url) {
+	try {
+		const parsed = new URL(url);
+		if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
+			return null;
+		}
+		let pathname = decodeURIComponent(parsed.pathname);
+		if (pathname.endsWith("/")) {
+			pathname = path.join(pathname, "index.html");
+		} else if (path.extname(pathname) === "") {
+			pathname = path.join(pathname, "index.html");
+		}
+		return path.join(PUBLIC_DIR, pathname);
+	} catch {
+		return null;
+	}
+}
+
+// Cache of which files exist under PUBLIC_DIR across the audit run.
+const _existsCache = new Map();
+function publicFileExists(targetPath) {
+	if (_existsCache.has(targetPath)) {
+		return _existsCache.get(targetPath);
+	}
+	let exists = false;
+	try {
+		require("node:fs").accessSync(targetPath);
+		exists = true;
+	} catch {
+		exists = false;
+	}
+	_existsCache.set(targetPath, exists);
+	return exists;
 }
 
 async function main() {

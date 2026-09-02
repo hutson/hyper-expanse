@@ -1,0 +1,23 @@
+{{ define "main" }}
+
+{{ $hutson := hugo.Data.hutson | default dict }}
+
+<section id="publications">
+	<h1>{{ .Title }}</h1>
+	{{ with .Content }}{{ . }}{{ end }}
+	{{ with $hutson.publications }}
+	<section>
+		<h2>My Publications</h2>
+		{{ range . }}
+		{{ $pub := . }}
+		<section>
+			<h3>{{ $pub.title }} - {{ $pub.subtitle }}</h3>
+			{{ $pub.description | markdownify }}
+			{{ with $pub.shop }}<p><b>→</b> <a href="{{ . }}">Purchase printed copy of {{ $pub.title }} - {{ $pub.subtitle }}</a></p>{{ end }}
+		</section>
+		{{ end }}
+	</section>
+	{{ end }}
+</section>
+
+{{ end }}
