@@ -2,9 +2,11 @@
 
 "use strict";
 
-// TODO: Hook this script up to CI (see .tools/test.sh as an example). Run it
-// when data/hutson.yaml or the profile picture changes, and fail the job if
-// any platform is out of sync or unreachable.
+// TODO: This script is currently intended to be run manually. Future work:
+// wire it into CI as a separate scheduled or manually-triggered job (not as
+// part of .tools/test.sh, which must remain offline/deterministic). Note that
+// npm blocks automated requests, so decide whether npm failures should fail
+// the job or warn only.
 //
 // Compares the canonical profile in data/hutson.yaml against public profile
 // data from external platforms and prints a summary table to stdout. HTTP
@@ -20,6 +22,16 @@ const FAILURE_EXIT_CODE = 1;
 const SUCCESS_EXIT_CODE = 0;
 const FETCH_TIMEOUT_MS = 15000;
 const USER_AGENT = "hyper-expanse-profile-check";
+const MIN_PREFIX_LENGTH = 20;
+
+const ENDPOINTS = {
+	github: "https://api.github.com/users/hutson",
+	codeberg: "https://codeberg.org/api/v1/users/hutson",
+	openCollectiveLegacy: "https://opencollective.com/hutson.json",
+	openCollectivePage: "https://opencollective.com/hutson",
+	npm: "https://www.npmjs.com/~hutson",
+	pypi: "https://pypi.org/user/hutson/",
+};
 
 function normalizeText(value) {
 	return String(value).replace(/\s+/g, " ").trim();
@@ -35,6 +47,10 @@ function stripHtml(html) {
 	return String(html).replace(/<[^>]*>/g, "");
 }
 
+// Normalize URLs for comparison by stripping the fragment and trailing slash,
+// lowercasing the entire result, and falling back to a trimmed lowercased
+// string for invalid input. This intentionally does not normalize scheme or
+// www subdomains; all known profile URLs are already lowercase and canonical.
 function normalizeUrl(url) {
 	try {
 		const parsed = new URL(url);
@@ -49,38 +65,32 @@ function normalizeUrl(url) {
 	}
 }
 
-async function fetchWithTimeout(url, headers = {}) {
-	const controller = new AbortController();
-	const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+async function fetchWithTimeout(url, { fetchImpl = fetch, headers = {} } = {}) {
 	try {
-		return await fetch(url, {
+		return await fetchImpl(url, {
 			headers: { "User-Agent": USER_AGENT, ...headers },
 			redirect: "follow",
-			signal: controller.signal,
+			signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
 		});
 	} catch (err) {
-		if (err.name === "AbortError") {
+		if (err.name === "TimeoutError") {
 			throw new Error(`request timed out after ${FETCH_TIMEOUT_MS}ms: ${url}`);
 		}
 		throw err;
-	} finally {
-		clearTimeout(timer);
 	}
 }
 
-async function fetchJson(url, headers = {}) {
-	const res = await fetchWithTimeout(url, headers);
+async function fetchJson(url, { fetchImpl = fetch, headers = {} } = {}) {
+	const res = await fetchWithTimeout(url, { fetchImpl, headers });
 	if (!res.ok) {
 		throw new Error(`HTTP ${res.status} from ${url}`);
 	}
 	return res.json();
 }
 
-function result(platform, ok, notes) {
+function makeResult(platform, ok, notes) {
 	return { platform, status: ok ? "OK" : "MISMATCH", notes };
 }
-
-const MIN_PREFIX_LENGTH = 20;
 
 function compareDescription(notes, actual, expected) {
 	if (actual === null || actual === undefined || normalizeText(actual) === "") {
@@ -100,10 +110,10 @@ function compareDescription(notes, actual, expected) {
 
 // TODO: Compare the avatar image itself against assets/images/hutson-profile.png
 // (fetch the remote image and compare content hashes); for now we only check
-// that a non-empty, non-default avatar URL is present.
+// that a non-empty avatar URL is present.
 function checkAvatar(notes, avatarUrl) {
 	if (!avatarUrl) {
-		notes.push("avatar missing or default");
+		notes.push("avatar missing");
 		return false;
 	}
 	return true;
@@ -124,40 +134,32 @@ function compareLink(notes, label, actual, expected) {
 	return true;
 }
 
-async function checkGitHub(canonical) {
+async function checkGitHub(canonical, fetchImpl = fetch) {
 	const notes = [];
-	const user = await fetchJson("https://api.github.com/users/hutson", {
-		Accept: "application/vnd.github+json",
+	const user = await fetchJson(ENDPOINTS.github, {
+		fetchImpl,
+		headers: { Accept: "application/vnd.github+json" },
 	});
 	let ok = true;
 	ok = compareDescription(notes, user.bio, canonical.description) && ok;
 	ok = checkAvatar(notes, user.avatar_url) && ok;
 	ok = compareLink(notes, "website", user.blog, canonical.links.website) && ok;
-	return result("GitHub", ok, notes);
+	return makeResult("GitHub", ok, notes);
 }
 
-async function checkCodeberg(canonical) {
+async function checkCodeberg(canonical, fetchImpl = fetch) {
 	const notes = [];
-	const user = await fetchJson("https://codeberg.org/api/v1/users/hutson");
+	const user = await fetchJson(ENDPOINTS.codeberg, { fetchImpl });
 	let ok = true;
 	ok = compareDescription(notes, user.description ?? user.bio, canonical.description) && ok;
 	ok = checkAvatar(notes, user.avatar_url) && ok;
 	ok = compareLink(notes, "website", user.website, canonical.links.website) && ok;
-	return result("Codeberg", ok, notes);
+	return makeResult("Codeberg", ok, notes);
 }
 
-async function checkOpenCollective(canonical) {
+async function checkOpenCollective(canonical, fetchImpl = fetch) {
 	const notes = [];
-	let account;
-	// The legacy /<slug>.json endpoint omits profile metadata for some
-	// account types, so fall back to scraping the rendered page when the
-	// fields we need are absent.
-	const legacy = await fetchJson("https://opencollective.com/hutson.json").catch(() => null);
-	if (legacy && (legacy.description !== undefined || legacy.website !== undefined)) {
-		account = legacy;
-	} else {
-		account = await scrapeOpenCollectiveProfile();
-	}
+	const account = await fetchOpenCollectiveProfile(fetchImpl);
 	let ok = true;
 	// longDescription holds the full profile body (HTML); description is the
 	// short summary shown when the long form is unset.
@@ -165,23 +167,35 @@ async function checkOpenCollective(canonical) {
 		? stripHtml(account.longDescription)
 		: account.description;
 	ok = compareDescription(notes, description, canonical.description) && ok;
-	ok = checkAvatar(notes, account.image ?? account.imageUrl ?? legacy?.image) && ok;
+	ok = checkAvatar(notes, account.image ?? account.imageUrl) && ok;
 	ok = compareLink(notes, "website", account.website, canonical.links.website) && ok;
-	if (account.githubHandle) {
-		ok = compareLink(notes, "github", `https://github.com/${account.githubHandle}`, canonical.links.github) && ok;
-	}
-	return result("Open Collective", ok, notes);
+	ok = compareLink(
+		notes,
+		"github",
+		account.githubHandle ? `https://github.com/${account.githubHandle}` : null,
+		canonical.links.github,
+	) && ok;
+	return makeResult("Open Collective", ok, notes);
 }
 
-// The legacy /<slug>.json endpoint omits profile metadata for user accounts,
-// so fall back to the rendered page, which embeds the account record in the
-// Apollo client state inside the Next.js __NEXT_DATA__ script tag.
-async function scrapeOpenCollectiveProfile() {
-	const res = await fetchWithTimeout("https://opencollective.com/hutson");
-	if (!res.ok) {
-		throw new Error("HTTP " + res.status + " from Open Collective profile page");
+async function fetchOpenCollectiveProfile(fetchImpl = fetch) {
+	// The legacy /<slug>.json endpoint omits profile metadata for user
+	// accounts, so fall back to scraping the rendered page when it lacks the
+	// fields we need.
+	const legacy = await fetchJson(ENDPOINTS.openCollectiveLegacy, { fetchImpl }).catch(() => null);
+	if (legacy && (legacy.description !== undefined || legacy.website !== undefined)) {
+		return legacy;
 	}
-	const html = await res.text();
+	const res = await fetchWithTimeout(ENDPOINTS.openCollectivePage, { fetchImpl });
+	if (!res.ok) {
+		throw new Error(`HTTP ${res.status} from Open Collective profile page`);
+	}
+	return parseOpenCollectiveProfile(await res.text());
+}
+
+// The Open Collective profile page embeds the account record in the Apollo
+// client state inside the Next.js __NEXT_DATA__ script tag.
+function parseOpenCollectiveProfile(html) {
 	const dom = new JSDOM(html);
 	const el = dom.window.document.querySelector("script#__NEXT_DATA__");
 	if (!el) {
@@ -199,12 +213,12 @@ async function scrapeOpenCollectiveProfile() {
 	return apolloState[individualKey];
 }
 
-async function checkNpm(canonical) {
+async function checkNpm(canonical, fetchImpl = fetch) {
 	const notes = [];
-	const res = await fetchWithTimeout("https://www.npmjs.com/~hutson");
+	const res = await fetchWithTimeout(ENDPOINTS.npm, { fetchImpl });
 	if (!res.ok) {
 		throw new Error(
-			`HTTP ${res.status} from npm profile page; npm blocks automated requests, verify manually at https://www.npmjs.com/~hutson`,
+			`HTTP ${res.status} from npm profile page; npm blocks automated requests, verify manually at ${ENDPOINTS.npm}`,
 		);
 	}
 	const html = await res.text();
@@ -212,13 +226,14 @@ async function checkNpm(canonical) {
 	let ok = true;
 	ok = compareDescription(notes, profile.bio, canonical.description) && ok;
 	ok = checkAvatar(notes, profile.avatars?.large ?? profile.avatar) && ok;
-	if (profile.github) {
-		ok = compareLink(notes, "github", `https://github.com/${profile.github}`, canonical.links.github) && ok;
-	}
-	if (profile.homepage) {
-		ok = compareLink(notes, "website", profile.homepage, canonical.links.website) && ok;
-	}
-	return result("npm", ok, notes);
+	ok = compareLink(
+		notes,
+		"github",
+		profile.github ? `https://github.com/${profile.github}` : null,
+		canonical.links.github,
+	) && ok;
+	ok = compareLink(notes, "website", profile.homepage ?? null, canonical.links.website) && ok;
+	return makeResult("npm", ok, notes);
 }
 
 // The npm profile page embeds its initial render data as a JSON document
@@ -286,20 +301,24 @@ function extractBalancedJson(text, start) {
 // PyPI user profiles expose only a display name and project list; there is no
 // bio, avatar, or link metadata to compare, so this check only verifies that
 // the profile page exists and renders the expected username.
-async function checkPypi(canonical) {
-	const res = await fetchWithTimeout("https://pypi.org/user/hutson/");
+async function checkPypi(fetchImpl = fetch) {
+	const res = await fetchWithTimeout(ENDPOINTS.pypi, { fetchImpl });
 	if (!res.ok) {
 		throw new Error(`HTTP ${res.status} from PyPI profile page`);
 	}
 	const html = await res.text();
-	const dom = new JSDOM(html);
-	const title = dom.window.document.querySelector("title")?.textContent ?? "";
+	const title = parsePypiTitle(html);
 	const notes = [];
 	const ok = title.toLowerCase().includes("hutson");
 	if (!ok) {
 		notes.push(`unexpected profile page title: "${normalizeText(title)}"`);
 	}
-	return result("PyPI", ok, notes);
+	return makeResult("PyPI", ok, notes);
+}
+
+function parsePypiTitle(html) {
+	const dom = new JSDOM(html);
+	return dom.window.document.querySelector("title")?.textContent ?? "";
 }
 
 // Build the canonical profile from data/hutson.yaml. Links from contact,
@@ -316,6 +335,10 @@ async function loadCanonical() {
 	}
 	for (const section of ["follow", "sponsor"]) {
 		for (const entry of data[section] ?? []) {
+			if (typeof entry?.text !== "string" || typeof entry?.url !== "string") {
+				console.error(`warning: ignoring malformed ${section} entry: ${JSON.stringify(entry)}`);
+				continue;
+			}
 			links[normalizeText(entry.text).toLowerCase().replace(/\s+/g, "-")] = normalizeUrl(entry.url);
 		}
 	}
@@ -361,7 +384,26 @@ async function main() {
 	process.exit(failed ? FAILURE_EXIT_CODE : SUCCESS_EXIT_CODE);
 }
 
-main().catch((err) => {
-	console.error(err);
-	process.exit(FAILURE_EXIT_CODE);
-});
+module.exports = {
+	checkAvatar,
+	compareDescription,
+	compareLink,
+	excerpt,
+	extractBalancedJson,
+	fetchJson,
+	fetchWithTimeout,
+	loadCanonical,
+	makeResult,
+	normalizeText,
+	normalizeUrl,
+	parseOpenCollectiveProfile,
+	parsePypiTitle,
+	stripHtml,
+};
+
+if (require.main === module) {
+	main().catch((err) => {
+		console.error(err);
+		process.exit(FAILURE_EXIT_CODE);
+	});
+}
