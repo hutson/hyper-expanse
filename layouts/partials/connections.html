@@ -3,13 +3,15 @@
 {{ $sponsor := .sponsor | default slice }}
 
 <ul class="connections">
+	{{/* rel="me" declares these as the same person's profiles, enabling
+	Mastodon link verification and other identity-graph consumers. */}}
 	{{ with $contact.linkedin }}
-	<li><a href="{{ . }}">LinkedIn</a></li>
+	<li><a href="{{ . }}" rel="me">LinkedIn</a></li>
 	{{ end }}
 	{{ range $follow }}
-	<li><a href="{{ .url }}">{{ .text }}</a></li>
+	<li><a href="{{ .url }}" rel="me">{{ .text }}</a></li>
 	{{ end }}
 	{{ range $sponsor }}
-	<li><a href="{{ .url }}">{{ .text }}</a></li>
+	<li><a href="{{ .url }}" rel="me">{{ .text }}</a></li>
 	{{ end }}
 </ul>

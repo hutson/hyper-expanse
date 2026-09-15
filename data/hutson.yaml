@@ -2,10 +2,17 @@ name: Hutson Betts
 title: Principal Software Engineer
 picture: hutson-profile.png
 
+description_seo: >-
+  Principal Software Engineer at FactSet building developer experience platforms: CI/CD, source control, and AI coding assistants with AWS, Terraform, Go, and Python.
+
 contact:
   email:
   phone:
   linkedin:
+  mastodon:
+  fedora:
+  debian:
+  kde:
   location: Texas, USA
   website: https://hyper-expanse.net/hutson/
   github: https://github.com/hutson

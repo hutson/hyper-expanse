@@ -68,6 +68,12 @@ nav a[aria-current="page"] {
 	text-align: left;
 }
 
+/* The h1 wraps the h-card's u-url self-link; keep it looking like the
+heading rather than an inline content link. */
+#profile h1 a {
+	color: inherit;
+}
+
 #profile h1,
 #resume h1 {
 	margin-top: 0;

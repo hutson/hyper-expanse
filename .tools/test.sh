@@ -43,5 +43,11 @@ npm run test:a11y
 echo "✓ 'accessibility' passed"
 echo
 
+echo "==================== SEO ==========================="
+echo "Auditing generated HTML for SEO and social metadata..."
+npm run test:seo
+echo "✓ 'seo' passed"
+echo
+
 echo "==================== ALL CHECKS PASSED ============"
 echo "✓ Code formatting, linting, and tests completed successfully"

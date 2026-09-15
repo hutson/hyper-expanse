@@ -34,15 +34,15 @@ npm run check:profiles
 - The website is intended to be responsive across screen sizes and devices.
 - All build, test, and tooling logic is kept inside the `.tools/` directory so that configuration and interactions are easy to reason about and remain in one place.
 - The site uses raw CSS rather than a preprocessor (such as SCSS) or a CSS framework, and raw HTML and minimal Hugo templates rather than a JavaScript framework. This keeps the dependency surface small and the output easy to inspect.
-- Node.js is used solely for offline quality checks: HTML validation (`html-validate`), CSS linting (`stylelint`), and a lightweight `jsdom`-based accessibility audit. No heavy-weight browser-based or online tools should be used.
+- Node.js is used solely for offline quality checks: HTML validation (`html-validate`), CSS linting (`stylelint`), a lightweight `jsdom`-based accessibility audit, and a `jsdom`-based SEO/social-metadata audit (canonical URLs, Open Graph, JSON-LD, h-card microformats, robots.txt, sitemap, feeds). No heavy-weight browser-based or online tools should be used.
 
 ## Content Tagging
 
 Projects, publications, employment, and education are authored in
 `data/hutson.yaml`. Guides and articles are authored as content files under
 `content/hutson/<section>/`. Projects, articles, and guides each carry a
-`tag` field — front matter for guides and articles, the `projects:` list in
-`data/hutson.yaml` for projects — that is either `personal` (the default,
+`tag` field (front matter for guides and articles, the `projects:` list in
+`data/hutson.yaml` for projects) that is either `personal` (the default,
 when omitted) or `professional`. Content tagged `professional` is assembled
 into `/hutson/resume/` and the generated `/hutson/resume.pdf`; content
 tagged `personal` is excluded from the resume but still appears on its

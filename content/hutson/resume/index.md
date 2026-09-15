@@ -1,4 +1,4 @@
 ---
-title: "Hutson Betts — Resume"
+title: "Hutson Betts - Principal Software Engineer"
 type: resume
 ---

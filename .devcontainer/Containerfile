@@ -35,6 +35,7 @@ RUN curl -sSL "https://github.com/gohugoio/hugo/releases/download/v0.164.0/hugo_
 
 # ---
 
+# hadolint ignore=DL3066
 USER vscode
 WORKDIR /home/vscode/.dotfiles
 RUN git init . \
@@ -46,7 +47,7 @@ RUN bash install.sh
 # NOTE: The container's default user must remain root for Dev Container
 # orchestrator setup and lifecycle hooks. The remoteUser in
 # devcontainer.json drops to vscode for interactive development.
-# hadolint ignore=DL3002
+# hadolint ignore=DL3002,DL3066
 USER root
 
 WORKDIR /workspace

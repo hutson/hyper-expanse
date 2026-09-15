@@ -5,9 +5,12 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'">
+	<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; base-uri 'self'; form-action 'self'">
+	<meta name="theme-color" content="#111215" media="(prefers-color-scheme: dark)">
+	<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 	<title>{{ .Title }}</title>
-	{{ with site.Home.OutputFormats.Get "rss" }}
+	{{ partial "head/seo.html" . }}
+	{{ with .OutputFormats.Get "rss" }}
 		<link rel="alternate" type="application/rss+xml" title="{{ site.Title }}" href="{{ .RelPermalink }}">
 	{{ end }}
 	<link rel="icon" type="image/svg+xml" href="{{ $logo.RelPermalink }}" sizes="any">

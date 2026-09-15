@@ -1,0 +1,4 @@
+{{/* Emits a JSON-LD script tag from the HTML context; Hugo's template
+escaper rewrites trusted strings rendered inside a <script> element as JS
+string literals, so the whole tag must be assembled here instead. */}}
+{{ printf "<script type=\"application/ld+json\">%s</script>" (. | jsonify) | safeHTML }}

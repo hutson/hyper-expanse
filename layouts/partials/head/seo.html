@@ -1,0 +1,127 @@
+{{ $hutson := hugo.Data.hutson | default dict }}
+{{ $iso8601 := "2006-01-02T15:04:05Z07:00" }}
+{{ $locale := replace site.Language.Locale "-" "_" }}
+{{ $isProfilePage := in (slice "profile" "resume") .Type }}
+{{ $isContentPage := in (slice "guide" "article") .Type }}
+
+{{/* Description chain: a page's own front matter wins; profile-facing pages
+use the concise professional summary; everything else falls back to the
+site-wide description. */}}
+{{ $description := .Params.description }}
+{{ if not $description }}
+	{{ if $isProfilePage }}{{ $description = $hutson.description_seo }}{{ end }}
+{{ end }}
+{{ if not $description }}{{ $description = site.Params.description }}{{ end }}
+
+{{ $ogImage := (resources.Get (printf "images/%s" $hutson.picture)).Process "resize 600x600 jpg q85" }}
+{{ $authorRef := dict "@type" "Person" "name" $hutson.name "url" $hutson.contact.website }}
+
+<link rel="canonical" href="{{ .Permalink }}">
+{{ with $description }}
+	<meta name="description" content="{{ . }}">
+{{ end }}
+<meta name="author" content="{{ $hutson.name }}">
+{{ with $hutson.contact.mastodon }}
+	{{/* fediverse:creator needs the @user@host form; derive it from the profile URL. */}}
+	{{ $u := urls.Parse . }}
+	<meta name="fediverse:creator" content="{{ printf "@%s@%s" (strings.TrimPrefix "@" (trim $u.Path "/")) $u.Hostname }}">
+{{ end }}
+
+<meta property="og:title" content="{{ .Title }}">
+{{ with $description }}
+	<meta property="og:description" content="{{ . }}">
+{{ end }}
+{{ $ogType := "website" }}
+{{ if $isProfilePage }}
+	{{ $ogType = "profile" }}
+{{ else if $isContentPage }}
+	{{ $ogType = "article" }}
+{{ end }}
+<meta property="og:type" content="{{ $ogType }}">
+<meta property="og:url" content="{{ .Permalink }}">
+<meta property="og:site_name" content="{{ site.Title }}">
+<meta property="og:locale" content="{{ $locale }}">
+<meta property="og:image" content="{{ $ogImage.Permalink }}">
+<meta property="og:image:width" content="600">
+<meta property="og:image:height" content="600">
+<meta property="og:image:alt" content="Profile picture of {{ $hutson.name }}">
+{{ if $isContentPage }}
+	<meta property="article:published_time" content="{{ .Date.Format $iso8601 }}">
+	<meta property="article:modified_time" content="{{ .Lastmod.Format $iso8601 }}">
+{{ end }}
+
+{{/* Build the Person entity once; every page publishes it (or nests it as the
+mainEntity of a ProfilePage) so search engines can associate the profile,
+role, skills, and external accounts. */}}
+{{ $sameAs := slice }}
+{{ with $hutson.contact.linkedin }}{{ $sameAs = $sameAs | append . }}{{ end }}
+{{ with $hutson.contact.mastodon }}{{ $sameAs = $sameAs | append . }}{{ end }}
+{{ range $hutson.follow }}{{ $sameAs = $sameAs | append .url }}{{ end }}
+{{ range $hutson.sponsor }}{{ $sameAs = $sameAs | append .url }}{{ end }}
+{{ $sameAs = $sameAs | uniq }}
+
+{{ $knowsAbout := slice }}
+{{ range $hutson.skills }}{{ range .items }}{{ $knowsAbout = $knowsAbout | append . }}{{ end }}{{ end }}
+
+{{ $worksFor := dict }}
+{{ with $hutson.employment }}
+	{{ with index . 0 }}
+		{{ $worksFor = dict "@type" "Organization" "name" .company }}
+		{{ with .website }}{{ $worksFor = merge $worksFor (dict "sameAs" (slice .)) }}{{ end }}
+	{{ end }}
+{{ end }}
+
+{{ $person := dict "@context" "https://schema.org" "@type" "Person" "name" $hutson.name "jobTitle" $hutson.title "url" $hutson.contact.website "image" $ogImage.Permalink }}
+{{ with $sameAs }}{{ $person = merge $person (dict "sameAs" .) }}{{ end }}
+{{ with $knowsAbout }}{{ $person = merge $person (dict "knowsAbout" .) }}{{ end }}
+{{ with $worksFor }}{{ $person = merge $person (dict "worksFor" .) }}{{ end }}
+
+{{ if eq .Type "profile" }}
+	{{ partial "head/jsonld.html" (dict "@context" "https://schema.org" "@type" "ProfilePage" "dateModified" (.Lastmod.Format $iso8601) "url" .Permalink "mainEntity" $person) }}
+{{ else }}
+	{{ partial "head/jsonld.html" $person }}
+{{ end }}
+
+{{ if $isContentPage }}
+	{{ $articleType := "TechArticle" }}
+	{{ if eq .Type "article" }}{{ $articleType = "BlogPosting" }}{{ end }}
+	{{ partial "head/jsonld.html" (dict "@context" "https://schema.org" "@type" $articleType "headline" .Title "description" $description "inLanguage" site.Language.Locale "url" .Permalink "datePublished" (.Date.Format $iso8601) "dateModified" (.Lastmod.Format $iso8601) "author" $person "publisher" $authorRef) }}
+	{{/* Crumbs run home to current page; the ancestry here is shallow enough
+	to unroll rather than recurse. */}}
+	{{ $nodes := slice . }}
+	{{ with .Parent }}{{ $nodes = $nodes | append . }}{{ with .Parent }}{{ $nodes = $nodes | append . }}{{ with .Parent }}{{ $nodes = $nodes | append . }}{{ end }}{{ end }}{{ end }}
+	{{ $nodes = collections.Reverse $nodes }}
+	{{ $crumbs := slice }}
+	{{ range $i, $node := $nodes }}
+		{{ $name := $node.Title }}
+		{{ if $node.IsHome }}{{ $name = site.Title }}{{ end }}
+		{{ $crumbs = $crumbs | append (dict "@type" "ListItem" "position" (add $i 1) "name" $name "item" $node.Permalink) }}
+	{{ end }}
+	{{ partial "head/jsonld.html" (dict "@context" "https://schema.org" "@type" "BreadcrumbList" "itemListElement" $crumbs) }}
+{{ end }}
+
+{{ if eq .Type "projects" }}
+	{{ $items := slice }}
+	{{ range $i, $project := $hutson.projects }}
+		{{ $code := dict "@type" "SoftwareSourceCode" "name" $project.title "description" $project.description "codeRepository" $project.repository "author" $authorRef }}
+		{{ with $project.url }}{{ $code = merge $code (dict "url" .) }}{{ end }}
+		{{ $items = $items | append (dict "@type" "ListItem" "position" (add $i 1) "item" $code) }}
+	{{ end }}
+	{{ partial "head/jsonld.html" (dict "@context" "https://schema.org" "@type" "CollectionPage" "name" .Title "url" .Permalink "mainEntity" (dict "@type" "ItemList" "itemListElement" $items)) }}
+{{ end }}
+
+{{/* TODO: google-site-verification exists only to improve discoverability on
+Google Search Console. This code will go away when the platform supports an
+open verification protocol or goes offline.
+Reference: https://support.google.com/webmasters/answer/9008080 */}}
+{{ with site.Params.google_site_verification }}
+	<meta name="google-site-verification" content="{{ . }}">
+{{ end }}
+
+{{/* TODO: msvalidate.01 exists only to improve discoverability on Bing
+Webmaster Tools. This code will go away when the platform supports an open
+verification protocol or goes offline.
+Reference: https://www.bing.com/webmasters/help/add-and-verify-site-12184f8b */}}
+{{ with site.Params.msvalidate_01 }}
+	<meta name="msvalidate.01" content="{{ . }}">
+{{ end }}
