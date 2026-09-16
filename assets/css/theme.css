@@ -1,5 +1,19 @@
 @import 'hugo:vars';
 
+:root {
+	--underline: #39FF14;
+	--heading-rule: #fff;
+	--bar: rgb(255 255 255 / 30%);
+}
+
+@media screen and (prefers-color-scheme: light) {
+	:root {
+		--underline: #00B33C;
+		--heading-rule: #000;
+		--bar: rgb(0 0 0 / 30%);
+	}
+}
+
 html {
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
@@ -11,11 +25,11 @@ body {
 
 a {
 	text-decoration: none;
-	color: lightblue;
+	color: #7DC7FF;
 }
 
 h2 {
-	border-bottom: 2px solid currentcolor;
+	border-bottom: 2px solid var(--heading-rule);
 	display: inline-block;
 }
 
@@ -60,7 +74,7 @@ nav header img {
 
 	a {
 		text-decoration: none;
-		color: blue;
+		color: #0056B3;
 	}
 
 	nav a,

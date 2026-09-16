@@ -3,11 +3,20 @@
 <section id="guides">
 	<h1>{{ .Title }}</h1>
 	{{ with .Content }}{{ . }}{{ end }}
+	{{ $pages := where (where .Pages "Type" "guide") "Draft" false }}
+	{{ if eq (len $pages) 0 }}
+	<p>No guides yet.</p>
+	{{ else }}
 	<ul>
-		{{ range where (where .Pages "Type" "guide") "Draft" false }}
-		<li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+		{{ range $pages.ByLastmod.Reverse }}
+		{{ $date := or .Lastmod .Date }}
+		<li>
+			<a href="{{ .RelPermalink }}">{{ .Title }}</a>
+			{{ if not $date.IsZero }}<time class="muted" datetime="{{ $date.Format "2006-01-02" }}">Last edited: {{ $date.Format "January 2, 2006" }}</time>{{ end }}
+		</li>
 		{{ end }}
 	</ul>
+	{{ end }}
 </section>
 
 {{ end }}

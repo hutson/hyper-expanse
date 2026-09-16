@@ -70,9 +70,6 @@ function resolveColor(value, background) {
 	if (v === "black" || v === "#000" || v === "#000000") {
 		return { r: 0, g: 0, b: 0 };
 	}
-	if (v === "lightblue" || v === "#add8e6") {
-		return { r: 173, g: 216, b: 230 };
-	}
 	if (v === "gray" || v === "grey" || v === "#808080") {
 		return { r: 128, g: 128, b: 128 };
 	}

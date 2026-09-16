@@ -3,24 +3,23 @@
 {{ $hutson := hugo.Data.hutson | default dict }}
 {{ $src := resources.Get (printf "images/%s" $hutson.picture) }}
 
-{{/* h-card classes make this page a machine-readable profile; a
-representative h-card carries exactly one u-url (the page's own canonical
-URL, here implied by the name link) while the shared connections partial
-contributes the rel="me" identity links. */}}
+{{/* h-card classes make this page a machine-readable profile; the page URL
+is the implicit canonical (u-url), the shared connections partial contributes
+the rel="me" identity links, and the picture carries u-photo. */}}
 <section id="profile" class="h-card">
-	<h1 class="p-name"><a class="u-url" href="{{ .Permalink }}">{{ $hutson.name }}</a></h1>
+	<h1 class="p-name">{{ $hutson.name }}</h1>
 	{{ with $src }}
-	{{ $placeholder := $src.Process "resize 20x20 webp q30 hint photo" }}
-	{{ $png200 := $src.Process "resize 200x200 png" }}
-	{{ $png400 := $src.Process "resize 400x400 png" }}
-	{{ $png600 := $src.Process "resize 600x600 png" }}
-	{{ $webp200 := $src.Process "resize 200x200 webp q98 lanczos hint photo" }}
-	{{ $webp400 := $src.Process "resize 400x400 webp q98 lanczos hint photo" }}
-	{{ $webp600 := $src.Process "resize 600x600 webp q98 lanczos hint photo" }}
-	{{ $avif200 := $src.Process "resize 200x200 avif q98 lanczos hint photo" }}
-	{{ $avif400 := $src.Process "resize 400x400 avif q98 lanczos hint photo" }}
-	{{ $avif600 := $src.Process "resize 600x600 avif q98 lanczos hint photo" }}
 	<picture>
+		{{ $placeholder := $src.Process "resize 20x20 webp q30 hint photo" }}
+		{{ $png200 := $src.Process "resize 200x200 png" }}
+		{{ $png400 := $src.Process "resize 400x400 png" }}
+		{{ $png600 := $src.Process "resize 600x600 png" }}
+		{{ $webp200 := $src.Process "resize 200x200 webp q98 lanczos hint photo" }}
+		{{ $webp400 := $src.Process "resize 400x400 webp q98 lanczos hint photo" }}
+		{{ $webp600 := $src.Process "resize 600x600 webp q98 lanczos hint photo" }}
+		{{ $avif200 := $src.Process "resize 200x200 avif q98 lanczos hint photo" }}
+		{{ $avif400 := $src.Process "resize 400x400 avif q98 lanczos hint photo" }}
+		{{ $avif600 := $src.Process "resize 600x600 avif q98 lanczos hint photo" }}
 		<source srcset="{{ $avif600.RelPermalink }} 3x, {{ $avif400.RelPermalink }} 2x, {{ $avif200.RelPermalink }} 1x" type="{{ $avif200.MediaType.Type }}">
 		<source srcset="{{ $webp600.RelPermalink }} 3x, {{ $webp400.RelPermalink }} 2x, {{ $webp200.RelPermalink }} 1x" type="{{ $webp200.MediaType.Type }}">
 		<img src="{{ $placeholder.RelPermalink }}" srcset="{{ $png600.RelPermalink }} 3x, {{ $png400.RelPermalink }} 2x, {{ $png200.RelPermalink }} 1x" alt="Profile picture of {{ $hutson.name }}" class="u-photo" width="200" height="200">

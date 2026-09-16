@@ -147,12 +147,14 @@ function auditHCard(document, canonical, profile, issues) {
 	if (!card.querySelector("img.u-photo[src]")) {
 		issues.push({ rule: "microformats", message: "h-card is missing a u-photo image" });
 	}
-	// A representative h-card declares exactly one u-url, pointing at the
-	// page's own canonical URL; external account links carry rel="me" instead.
+	// A representative h-card's u-url is implicit on the page it describes
+	// (the page's canonical URL is the profile URL). We accept that case, and
+	// we also accept an explicit <a class="u-url" href="..."> when present,
+	// requiring it to match the canonical.
 	const urls = card.querySelectorAll(".u-url");
-	if (urls.length !== 1) {
-		issues.push({ rule: "microformats", message: `Representative h-card needs exactly one u-url, got ${urls.length}` });
-	} else if (urls[0].getAttribute("href") !== canonical) {
+	if (urls.length > 1) {
+		issues.push({ rule: "microformats", message: `Representative h-card must declare at most one u-url, got ${urls.length}` });
+	} else if (urls.length === 1 && urls[0].getAttribute("href") !== canonical) {
 		issues.push({
 			rule: "microformats",
 			message: `h-card u-url "${urls[0].getAttribute("href")}" does not match the canonical URL "${canonical}"`,

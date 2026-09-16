@@ -5,9 +5,7 @@
 	{{ $vars := dict "logo-url" (printf "url('%s')" $logoData) }}
 	{{ $opts = dict "minify" (not hugo.IsDevelopment) "vars" $vars }}
 {{ end }}
-{{ $cssFile := "css/profile.css" }}
-{{ if .IsHome }}{{ $cssFile = "css/main.css" }}{{ end }}
-{{ $css := resources.Get $cssFile | css.Build $opts }}
+{{ $css := resources.Get "css/profile.css" | css.Build $opts }}
 <style>
 	{{ $css.Content | safeCSS }}
 </style>

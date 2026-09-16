@@ -33,7 +33,6 @@ renders it to /hutson/resume.pdf unchanged. */}}
 	<section class="summary">
 		<h2>Summary</h2>
 		<p>{{ . }}</p>
-		{{ partial "connections.html" $hutson }}
 	</section>
 	{{ end }}
 
@@ -58,18 +57,20 @@ renders it to /hutson/resume.pdf unchanged. */}}
 	{{ with $professionalProjects }}
 	<section class="projects">
 		<h2>Selected Projects</h2>
-		{{ range . }}
-		<article>
-			<header>
-				<h3>{{ .title }}</h3>
-			</header>
-			{{ with .description }}
-			<p>{{ . }}</p>
+		<div class="project-columns">
+			{{ range . }}
+			<article>
+				<header>
+					<h3>{{ .title }}</h3>
+				</header>
+				{{ with .description }}
+				<p>{{ . }}</p>
+				{{ end }}
+				{{ with .repository }}<p><b>→</b> <a href="{{ . }}">{{ . }}</a></p>{{ end }}
+				{{ with .url }}<p><b>→</b> <a href="{{ . }}">{{ . }}</a></p>{{ end }}
+			</article>
 			{{ end }}
-			{{ with .repository }}<p><b>→</b> <a href="{{ . }}">{{ . }}</a></p>{{ end }}
-			{{ with .url }}<p><b>→</b> <a href="{{ . }}">{{ . }}</a></p>{{ end }}
-		</article>
-		{{ end }}
+		</div>
 	</section>
 	{{ end }}
 
@@ -89,11 +90,7 @@ renders it to /hutson/resume.pdf unchanged. */}}
 		<h2>Guides</h2>
 		<ul>
 			{{ range . }}
-		<li>
-			<a href="{{ .RelPermalink }}">{{ .Title }}</a>
-				{{ $date := or .Lastmod .Date }}
-				{{ if not $date.IsZero }} — <time>{{ $date.Format "January 2, 2006" }}</time>{{ end }}
-			</li>
+			<li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
 			{{ end }}
 		</ul>
 	</section>

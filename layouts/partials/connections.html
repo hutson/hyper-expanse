@@ -1,17 +1,19 @@
 {{ $contact := .contact | default dict }}
-{{ $follow := .follow | default slice }}
-{{ $sponsor := .sponsor | default slice }}
+{{ $links := (.follow | default slice) | append (.sponsor | default slice) }}
 
+{{/* TODO: Introduce SVG-based icons for common platforms once we settle on
+a source (e.g., a forked Simple Icons set, or a faithful hand-drawn subset for
+the platforms listed in data/hutson.yaml). */}}
+
+{{/* rel="me" declares these as the same person's profiles, enabling
+Mastodon link verification and other identity-graph consumers. */}}
 <ul class="connections">
-	{{/* rel="me" declares these as the same person's profiles, enabling
-	Mastodon link verification and other identity-graph consumers. */}}
 	{{ with $contact.linkedin }}
-	<li><a href="{{ . }}" rel="me">LinkedIn</a></li>
+	<li><a href="{{ . }}" rel="me"><span>LinkedIn</span></a></li>
 	{{ end }}
-	{{ range $follow }}
-	<li><a href="{{ .url }}" rel="me">{{ .text }}</a></li>
-	{{ end }}
-	{{ range $sponsor }}
-	<li><a href="{{ .url }}" rel="me">{{ .text }}</a></li>
+	{{ range $links }}
+	<li>
+		<a href="{{ .url }}" rel="me"><span>{{ .text }}</span></a>
+	</li>
 	{{ end }}
 </ul>
