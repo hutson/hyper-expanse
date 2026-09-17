@@ -38,6 +38,15 @@ main {
 	max-width: 700px;
 }
 
+/* Keep the line length capped on large screens while letting narrow screens
+use the viewport width minus breathing room. Scoped to screen so the
+WeasyPrint PDF keeps its current print layout. */
+@media screen {
+	main {
+		max-width: min(700px, 100% - 2rem);
+	}
+}
+
 nav {
 	align-items: center;
 	display: grid;
@@ -46,8 +55,11 @@ nav {
 	margin: 10px;
 }
 
+/* Keep the site name on one line; the flexible ul absorbs width changes
+instead of squeezing the header into a wrapped two-line logo. */
 nav header {
 	justify-self: start;
+	white-space: nowrap;
 }
 
 nav ul {

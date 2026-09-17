@@ -48,6 +48,10 @@ nav a[aria-current="page"] {
 	display: inline;
 }
 
+.connections a {
+	white-space: nowrap;
+}
+
 /* Middle dot is glued to the preceding link by a leading non-breaking space so
 the separator can never orphan onto the start of a wrapped line; the trailing
 regular space is the single break opportunity between entries. */
@@ -242,11 +246,47 @@ main h1 {
 	}
 }
 
-@media (width <= 400px) {
+/* Stack the nav below the point where the centered link list and the
+nowrap logo can no longer share a row (logo ~170px + links ~550px + the two
+side tracks). */
+@media (width <= 920px) {
+	nav {
+		grid-template-columns: 1fr;
+	}
+
+	nav header {
+		justify-self: center;
+	}
+
+	nav ul {
+		grid-column: auto;
+		justify-content: center;
+	}
+}
+
+/* Narrow screens: drop the avatar float so profile text is not squeezed
+beside it, and disable justification because the remaining line widths are
+too short to space words without large gaps. */
+@media (width <= 600px) {
 	#profile picture {
-		float: none;
 		display: block;
+		float: none;
 		margin: 0 auto 1rem;
+		width: fit-content;
+	}
+
+	#profile,
+	#articles,
+	#guides,
+	#publications,
+	#resume {
+		text-align: left;
+	}
+
+	#profile h1,
+	#resume h1,
+	#resume h2 {
+		text-align: center;
 	}
 }
 
