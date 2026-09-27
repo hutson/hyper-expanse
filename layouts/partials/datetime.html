@@ -1,0 +1,8 @@
+{{/* Resume dates are authored as ISO year-month strings (e.g. 2012-06) so the rendered <time> element can carry a machine-readable datetime attribute while readers see the same human-friendly text as before. Non-date values, such as "Present", are rendered as plain text because no datetime attribute can be derived from them. */}}
+{{- $value := printf "%s" . -}}
+{{- if findRE `^\d{4}-\d{2}$` $value -}}
+	{{- $firstOfMonth := time.AsTime (printf "%s-01" $value) -}}
+	<time datetime="{{ $value }}">{{ time.Format "January, 2006" $firstOfMonth }}</time>
+{{- else -}}
+	{{ $value }}
+{{- end -}}

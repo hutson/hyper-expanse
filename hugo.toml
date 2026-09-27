@@ -8,6 +8,11 @@ enableRobotsTXT = true
 # that Hugo would otherwise generate.
 disableKinds = ["taxonomy", "term"]
 
+# The email signature source files are mail-client fragments, not site pages;
+# exclude them from the content pipeline so Hugo neither assembles them into
+# pages (its security policy rejects raw text/html) nor validates them.
+ignoreFiles = [ "/content/hutson/signatures/.*" ]
+
 cleanDestinationDir = true
 
 # Derive page dates from Git commit metadata so manually editing front
@@ -16,8 +21,6 @@ enableGitInfo = true
 
 [params]
   description = "The personal site of Hutson Betts: engineering guides, articles, projects, and publications on developer experience, source control, and open-source contribution."
-  google_site_verification = ""
-  msvalidate_01 = ""
 
 [frontmatter]
   date = [':git', 'date', 'publishdate', 'pubdate', 'published']

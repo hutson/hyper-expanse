@@ -117,12 +117,12 @@ projects:
 employment:
   - company: FactSet Research Systems
     end: Present
-    start: June, 2012
+    start: "2012-06"
     title: Principal Software Engineer
     website: https://www.factset.com/
     roles:
       - end: Present
-        start: September, 2019
+        start: "2019-09"
         contributions:
           - Technical lead for a team at FactSet responsible for architecting and building infrastructure that supports most engineers at FactSet in the areas of source control, artifact storage and distribution, continuous integration and delivery, code intelligence, generative AI coding assistants, and code quality analysis.
           - Recruited and trained a geographically-distributed agile engineering team to maintain the services and platforms our team provides to FactSet's engineering organization.
@@ -130,19 +130,19 @@ employment:
           - Lead for FactSet's internal code quality analysis platform since 2023.
           - Lead for FactSet's internal code intelligence strategy and infrastructure since 2022.
           - Technologies and tools I often work with include Git, AWS, Terraform, Packer, Bash, Golang, Lua, Linux, and a whole lot of different package managers.
-      - end: August, 2019
-        start: January, 2019
+      - end: "2019-08"
+        start: "2019-01"
         contributions:
           - Contributed to a Platform as a Service internal product.
           - Developed shared library, and its release process, for sharing components across PaaS portals.
-      - end: December, 2018
-        start: February, 2018
+      - end: "2018-12"
+        start: "2018-02"
         contributions:
           - Led Open Source initiative for System Infrastructure department, doubling the number of Open Source projects.
           - Managed infrastructure for automated dependency management; including upgrading and deprecation of packages.
           - Developed release tool prototype capable of on-boarding many languages with automated package release workflows, all while minimizing operational overhead.
-      - end: January, 2018
-        start: October, 2015
+      - end: "2018-01"
+        start: "2015-10"
         contributions:
           - Delivered on our company's need for pre-configured tooling to build client facing web applications, libraries, and NodeJS services.
           - Leveraged best of breed tools, such as GulpJS, Babel, Mocha, Karma, Express, Webpack, Rollup, etc.
@@ -154,27 +154,27 @@ employment:
           - Established a process for quick deployment of tool configuration for consistent use of best practices across software projects; such as TSLint, Babel, and TypeScript.
           - Authored our company's NodeJS usage policy for production processes, and fulfill role as point person for engaging the NodeJS community, including the Node LTS Working Group.
           - Organized a bi-weekly developer tool roundtable consisting of developers from across the company.
-      - end: September, 2016
-        start: October, 2015
+      - end: "2016-09"
+        start: "2015-10"
         contributions:
           - Participated in on-call rotation for git-based GitLab source control instance, artifact repository, and continuous integration and delivery (CI/CD) platform; providing effective, and timely, support for outages and consumer needs.
           - Appointed to the Architecture Review Board; a group tasked with defining company-wide engineering best practices and approving standard technology solutions.
-      - end: September, 2015
-        start: October, 2014
+      - end: "2015-09"
+        start: "2014-10"
         contributions:
           - Developed scaffolding tool, using Yeoman framework, to bootstrap new Analytics and Fixed Income NodeJS services.
           - Collaborated with engineers across multiple departments to maintain the build and deployment infrastructure for the company's web products; which included working with Jenkins and Perforce.
           - Assisted Analytics and Fixed Income software engineers troubleshoot build and deployment issues affecting their web products.
           - Researched emerging web technologies, such as the evolving ECMA-262 standard, and explored approaches to improve the developer experience.
-      - end: October, 2014
-        start: June, 2012
+      - end: "2014-10"
+        start: "2012-06"
         contributions:
           - Led retirement of key legacy application through community and product stakeholder engagement.
           - Collaborated on building, from the ground up, one of the first web-based products for the Analytics department using BackboneJS, before migrating to AngularJS in response to our changing requirements and needs.
           - Participated in a critical on-call rotation managing client portfolio data.
   - company: Texas A&M University
-    end: June, 2012
-    start: February, 2010
+    end: "2012-06"
+    start: "2010-02"
     title: Graduate Assistant
     website: https://www.tamu.edu/
     roles:
@@ -185,8 +185,8 @@ employment:
           - Built a virtual network orchestrator with Python, exposing functionality through a REST API.
           - Sustained strong uptime at VNEL through network monitoring and alerting using an in-house deployment of OpenNMS.
   - company: Texas Engineering Extension Service
-    end: August, 2009
-    start: August, 2006
+    end: "2009-08"
+    start: "2006-08"
     title: Part-Time Software Engineer
     website: https://teex.org/
     roles:
@@ -197,8 +197,8 @@ employment:
           - Gained experience in management and organizational system processes.
           - Led year long development effort on mission critical ground support software project with a team of 5 undergraduate students following Agile principles facilitated through the Scrum development framework.
   - company: Texas A&M University - Galveston
-    end: May, 2006
-    start: August, 2005
+    end: "2006-05"
+    start: "2005-08"
     title: Part-Time Office Assistant
     website: https://tamug.edu/
     roles:
@@ -207,10 +207,12 @@ employment:
 
 # education is intentionally empty; the resume template skips the section
 # when no entries exist. Each entry expects: school, start, end, details (optional).
+# start and end are ISO year-month strings (e.g. "2012-06") or "Present", so the
+# template can emit a machine-readable datetime attribute on <time> elements.
 # education:
 #   - school: Example University
-#     start: 2008
-#     end: 2010
+#     start: "2008-08"
+#     end: "2010-05"
 #     details: B.S. in Computer Science
 
 publications:

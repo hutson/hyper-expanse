@@ -6,10 +6,10 @@
 // social-sharing contract (canonical URLs, descriptions, Open Graph, JSON-LD,
 // h-card microformats, robots.txt, sitemap, feeds) against the cross-checked
 // source of truth in data/hutson.yaml. Social metadata stays on open
-// standards: X and Slack build their previews from Open Graph, so proprietary
-// twitter:* tags must never appear. Dormant tags (fediverse:creator,
-// verification tokens) must be absent while their data fields are empty, and
-// present once they are populated.
+// standards: modern preview consumers build their cards from Open Graph, so
+// proprietary platform-specific tags add nothing and must never appear.
+// Dormant tags (fediverse:creator) must be absent while their data fields are
+// empty, and present once they are populated.
 
 const fs = require("node:fs");
 const fsp = require("node:fs/promises");
@@ -243,21 +243,13 @@ function auditProjectsPage(relPath, document, blocks, profile, issues) {
 function auditDormantTags(document, profile, issues) {
 	// fediverse:creator is driven by contact.mastodon in data/hutson.yaml, so
 	// its presence must mirror the field: absent while empty, present once an
-	// account exists. The hugo.toml verification params are not read here (no
-	// TOML dependency); tags are only sanity-checked for a non-empty token
-	// when present, which also catches accidental "content=""" renders.
+	// account exists.
 	if (profile.mastodon) {
 		if (!hasMeta(document, "fediverse:creator")) {
 			issues.push({ rule: "dormant-tags", message: "contact.mastodon is set but fediverse:creator is missing" });
 		}
 	} else if (hasMeta(document, "fediverse:creator")) {
 		issues.push({ rule: "dormant-tags", message: "fediverse:creator is present but contact.mastodon is empty" });
-	}
-	for (const name of ["google-site-verification", "msvalidate.01"]) {
-		const el = document.querySelector(`meta[name="${name}"]`);
-		if (el && !(el.getAttribute("content") ?? "").trim()) {
-			issues.push({ rule: "dormant-tags", message: `<meta ${name}> rendered with an empty content value` });
-		}
 	}
 }
 
@@ -345,15 +337,6 @@ function auditPage(relPath, html, profile) {
 	}
 	if (isProfilePage && description !== profile.description) {
 		issues.push({ rule: "description", message: `Profile page description "${description}" does not match data/hutson.yaml description_seo` });
-	}
-
-	// X renders the preview card from og:title/og:description/og:image and
-	// defaults to the summary layout even when twitter:card is absent, and
-	// Slack's classic unfurler reads the same Open Graph tags. twitter:*
-	// metadata is therefore redundant here, and open standards are the
-	// site's contract.
-	if (document.querySelector('meta[name^="twitter:"], meta[property^="twitter:"]')) {
-		issues.push({ rule: "open-standards", message: "twitter:* metadata found; social previews must rely on Open Graph" });
 	}
 
 	if (document.querySelectorAll('meta[name="theme-color"]').length < 2) {

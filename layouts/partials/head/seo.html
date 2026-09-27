@@ -109,19 +109,3 @@ role, skills, and external accounts. */}}
 	{{ end }}
 	{{ partial "head/jsonld.html" (dict "@context" "https://schema.org" "@type" "CollectionPage" "name" .Title "url" .Permalink "mainEntity" (dict "@type" "ItemList" "itemListElement" $items)) }}
 {{ end }}
-
-{{/* TODO: google-site-verification exists only to improve discoverability on
-Google Search Console. This code will go away when the platform supports an
-open verification protocol or goes offline.
-Reference: https://support.google.com/webmasters/answer/9008080 */}}
-{{ with site.Params.google_site_verification }}
-	<meta name="google-site-verification" content="{{ . }}">
-{{ end }}
-
-{{/* TODO: msvalidate.01 exists only to improve discoverability on Bing
-Webmaster Tools. This code will go away when the platform supports an open
-verification protocol or goes offline.
-Reference: https://www.bing.com/webmasters/help/add-and-verify-site-12184f8b */}}
-{{ with site.Params.msvalidate_01 }}
-	<meta name="msvalidate.01" content="{{ . }}">
-{{ end }}

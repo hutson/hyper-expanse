@@ -79,7 +79,7 @@ renders it to /hutson/resume.pdf unchanged. */}}
 		<h2>Articles</h2>
 		<ul>
 			{{ range . }}
-			<li><a href="{{ .RelPermalink }}">{{ .Title }}</a> — <time>{{ .Date.Format "January 2, 2006" }}</time></li>
+			<li><a href="{{ .RelPermalink }}">{{ .Title }}</a> — <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time></li>
 			{{ end }}
 		</ul>
 	</section>
@@ -108,13 +108,13 @@ renders it to /hutson/resume.pdf unchanged. */}}
 				<h3>{{ .company }} — {{ .title }}</h3>
 				{{ end }}
 				<p class="subtitle">
-					<time>{{ .start }}</time> – <time>{{ .end }}</time>
+					{{ partial "datetime.html" .start }} – {{ partial "datetime.html" .end }}
 				</p>
 			</header>
 			{{ range .roles }}
 			{{ if .start }}
 			<p class="role-dates">
-				<time>{{ .start }}</time> – <time>{{ .end }}</time>
+				{{ partial "datetime.html" .start }} – {{ partial "datetime.html" .end }}
 			</p>
 			{{ end }}
 			<ul>
@@ -136,7 +136,7 @@ renders it to /hutson/resume.pdf unchanged. */}}
 			<header>
 				<h3>{{ .school }}</h3>
 				<p class="subtitle">
-					<time>{{ .start }}</time> – <time>{{ .end }}</time>
+					{{ partial "datetime.html" .start }} – {{ partial "datetime.html" .end }}
 				</p>
 			</header>
 			{{ with .details }}
