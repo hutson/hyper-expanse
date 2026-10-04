@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 
-set -euf -o pipefail
+set -o errexit -o nounset -o noglob -o pipefail
+readonly _trace_start_time_us=${EPOCHREALTIME//./}
+PS4='[DEBUGLEVEL:${SHLVL} SUBSHELL:${BASH_SUBSHELL} LINE:${LINENO} DIFF:$(us=$(( ${EPOCHREALTIME//./} - _trace_start_time_us )); ms=$(( us / 1000 )); printf "%d.%03d" $((ms / 1000)) $((ms % 1000)) )s SOURCE:${BASH_SOURCE}] '
 
-script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 project_name="$(basename "$(pwd)")"
 
 echo "==================== TESTING ${project_name^^} ===================="
@@ -11,12 +12,14 @@ echo
 
 echo "==================== HADOLINT ======================="
 echo "Running hadolint to lint Containerfile..."
-hadolint .devcontainer/Containerfile
+hadolint \
+	.devcontainer/Containerfile
 echo "✓ 'hadolint' passed"
 echo
 
 # Our website build must take place before we can validate HTML,
 # Styles, and Accessibility.
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 bash "${script_dir}/build.sh"
 echo
 
@@ -50,4 +53,3 @@ echo "✓ 'seo' passed"
 echo
 
 echo "==================== ALL CHECKS PASSED ============"
-echo "✓ Code formatting, linting, and tests completed successfully"
