@@ -53,3 +53,6 @@ echo "✓ 'seo' passed"
 echo
 
 echo "==================== ALL CHECKS PASSED ============"
+
+# Delete `node_modules/` directory as it causes `devsy` to fail with an error about too many files.
+rm -rf "node_modules/"
