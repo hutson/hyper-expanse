@@ -8,7 +8,8 @@
     "test:css": "stylelint \"assets/css/**/*.css\"",
     "test:a11y": "node .tools/audit-a11y.js",
     "test:seo": "node .tools/audit-seo.js",
-    "check:profiles": "node .tools/check-profiles.js"
+    "check:profiles": "node scripts/sync-profiles.js audit",
+    "sync:profiles": "node scripts/sync-profiles.js apply"
   },
   "devDependencies": {
     "html-validate": "^9.7.1",
