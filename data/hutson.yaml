@@ -8,7 +8,7 @@ description_seo: >-
 contact:
   email:
   phone:
-  linkedin:
+  linkedin: https://www.linkedin.com/in/hutson-betts/
   mastodon:
   fedora:
   debian:
@@ -19,7 +19,6 @@ contact:
   codeberg: https://codeberg.org/hutson
   npmjs: https://www.npmjs.com/~hutson
   pypi: https://pypi.org/user/hutson/
-
 follow:
   - text: Codeberg
     url: https://codeberg.org/hutson
