@@ -6,7 +6,7 @@ PS4='[DEBUGLEVEL:${SHLVL} SUBSHELL:${BASH_SUBSHELL} LINE:${LINENO} DIFF:$(us=$((
 
 project_name="$(basename "$(pwd)")"
 
-echo "==================== TESTING ${project_name^^} ===================="
+echo "==================== TESTING ${project_name^^} ====================="
 echo "Starting comprehensive code quality checks..."
 echo
 
@@ -15,6 +15,29 @@ echo "Running hadolint to lint Containerfile..."
 hadolint \
 	.devcontainer/Containerfile
 echo "✓ 'hadolint' passed"
+echo
+
+echo "==================== SHELL FORMAT CHECK ==============="
+echo "Checking if shell files are properly formatted..."
+unformatted_files=$(find . -path ./.git -prune -o -type f -exec sh -c 'file "$1" | grep -q "shell script" && shfmt -d "$1"' _ {} \; 2>&1 | grep -v "No such file or directory" || true)
+if [ -n "$unformatted_files" ]; then
+	echo "✗ Some files were not properly formatted:"
+	echo "$unformatted_files"
+	echo "Files need to be formatted with 'shfmt -w'"
+	exit 1
+fi
+echo "✓ All shell files are properly formatted"
+echo
+
+echo "==================== SHELLCHECK ======================"
+echo "Running shellcheck for static analysis..."
+shellcheck_errors=$(find . -path ./.git -prune -o -type f -exec sh -c 'file "$1" | grep -q "shell script" && shellcheck -x "$1"' _ {} \; 2>&1 || true)
+if [ -n "$shellcheck_errors" ]; then
+	echo "✗ 'shellcheck' reported issues:"
+	echo "$shellcheck_errors"
+	exit 1
+fi
+echo "✓ 'shellcheck' passed"
 echo
 
 # Our website build must take place before we can validate HTML,

@@ -2,32 +2,6 @@
 
 This repository contains the source for the [hyper-expanse.net](https://hyper-expanse.net/) website, a static site built with [Hugo](https://gohugo.io/), with the resume page also published as a PDF using [WeasyPrint](https://weasyprint.org/).
 
-## Development
-
-To start a local development server with live reload, run:
-
-```bash
-hugo server
-```
-
-To build the site, run:
-
-```bash
-bash .tools/build.sh
-```
-
-To test your changes to ensure they meet the requirements of this project, run:
-
-```bash
-bash .tools/test.sh
-```
-
-## Design Decisions
-
-- The website is intended to be responsive across screen sizes and devices.
-- The site uses raw CSS rather than a preprocessor (such as SCSS) or a CSS framework, and raw HTML and minimal Hugo templates rather than a JavaScript framework. This keeps the dependency surface small and the output easy to inspect.
-- Node.js is used solely for offline quality checks: HTML validation (`html-validate`), CSS linting (`stylelint`), a lightweight `jsdom`-based accessibility audit, and a `jsdom`-based SEO/social-metadata audit (canonical URLs, Open Graph, JSON-LD, h-card microformats, robots.txt, sitemap, feeds). No heavy-weight browser-based or online tools should be used.
-
 ## Content Tagging
 
 Author projects, publications, employment, and education in `data/hutson.yaml`, and guides and articles under `content/hutson/<section>/`.
@@ -71,3 +45,32 @@ Submit each URL at <https://search.google.com/test/rich-results> and confirm the
 - `https://hyper-expanse.net/hutson/projects/` → `Person`, `CollectionPage` with one `SoftwareSourceCode` per project.
 
 Run `npm run test:seo` (`.tools/audit-seo.js`) whenever structured data changes, then re-verify here. Schedule a fix for any rich result that disappears, or any new Google warning or error against the JSON-LD.
+
+## Design Decisions
+
+- One entry point to invoke all tests and quality checks.
+- The website is intended to be responsive across screen sizes and devices.
+- The site uses raw CSS rather than a preprocessor (such as SCSS) or a CSS framework, and raw HTML and minimal Hugo templates rather than a JavaScript framework. This keeps the dependency surface small and the output easy to inspect.
+- Node.js is used solely for offline quality checks: HTML validation (`html-validate`), CSS linting (`stylelint`), a lightweight `jsdom`-based accessibility audit, and a `jsdom`-based SEO/social-metadata audit (canonical URLs, Open Graph, JSON-LD, h-card microformats, robots.txt, sitemap, feeds). No heavy-weight browser-based or online tools should be used.
+
+## Development
+
+To start a local development server with live reload, run:
+
+```bash
+hugo server
+```
+
+Validate changes with this project's single test entry point, `.tools/test.sh`. It runs the static analysis and dynamic tests a change needs, entirely offline and is non-destructive and repeatable. No other commands are necessary to validate a change.
+
+Run it from the repository root, inside the Dev Container:
+
+```bash
+bash .tools/test.sh
+```
+
+If you are not inside a Dev Container, run it inside one via Devsy:
+
+```bash
+devsy ci . -- bash .tools/test.sh
+```
