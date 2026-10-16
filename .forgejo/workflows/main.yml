@@ -28,10 +28,13 @@ jobs:
           apt-get install -y --no-install-recommends \
             ca-certificates \
             curl \
+            file \
             git \
             nodejs \
             npm \
             python3 \
+            shellcheck \
+            shfmt \
             weasyprint
           rm -rf /var/lib/apt/lists/*
 
