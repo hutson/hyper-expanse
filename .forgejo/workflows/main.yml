@@ -44,12 +44,18 @@ jobs:
             && mv /tmp/hugo /usr/local/bin/hugo \
             && rm /tmp/hugo.tar.gz
 
+      - name: Prime npm cache
+        run: |
+          set -euf -o pipefail
+          npm ci --no-audit --no-fund --loglevel=error
+          rm -rf node_modules
+
       - name: Install hadolint
         run: |
           set -euf -o pipefail
-          curl -sSL "https://github.com/hadolint/hadolint/releases/download/v2.12.0/hadolint-Linux-x86_64" \
+          curl -sSL "https://github.com/hadolint/hadolint/releases/download/v2.15.1/hadolint-linux-x86_64" \
             -o /usr/local/bin/hadolint \
-            && echo "56de6d5e5ec427e17b74fa48d51271c7fc0d61244bf5c90e828aab8362d55010  /usr/local/bin/hadolint" | sha256sum --check --strict \
+            && echo "c7187db94eeeeca956519a6af171adc31453941a1e777961f6e680f697c8c507  /usr/local/bin/hadolint" | sha256sum --check --strict \
             && chmod +x /usr/local/bin/hadolint
 
       - name: Test

@@ -53,13 +53,15 @@ Run `npm run test:seo` (`.tools/audit-seo.js`) whenever structured data changes,
 - The site uses raw CSS rather than a preprocessor (such as SCSS) or a CSS framework, and raw HTML and minimal Hugo templates rather than a JavaScript framework. This keeps the dependency surface small and the output easy to inspect.
 - Node.js is used solely for offline quality checks: HTML validation (`html-validate`), CSS linting (`stylelint`), a lightweight `jsdom`-based accessibility audit, and a `jsdom`-based SEO/social-metadata audit (canonical URLs, Open Graph, JSON-LD, h-card microformats, robots.txt, sitemap, feeds). No heavy-weight browser-based or online tools should be used.
 
-## Development
+## Running Locally
 
 To start a local development server with live reload, run:
 
 ```bash
 hugo server
 ```
+
+## Development
 
 Validate changes with this project's single test entry point, `.tools/test.sh`. It runs the static analysis and dynamic tests a change needs, entirely offline and is non-destructive and repeatable. No other commands are necessary to validate a change.
 

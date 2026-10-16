@@ -47,8 +47,8 @@ bash "${script_dir}/build.sh"
 echo
 
 echo "==================== NPM INSTALL ==================="
-echo "Installing Node.js test dependencies..."
-npm ci --no-audit --no-fund --loglevel=error
+echo "Installing Node.js test dependencies from the container's primed npm cache..."
+npm ci --offline --no-audit --no-fund --loglevel=error
 echo
 
 echo "==================== HTML-VALIDATE ================="
@@ -75,7 +75,8 @@ npm run test:seo
 echo "✓ 'seo' passed"
 echo
 
-echo "==================== ALL CHECKS PASSED ============"
-
 # Delete `node_modules/` directory as it causes `devsy` to fail with an error about too many files.
 rm -rf "node_modules/"
+echo
+
+echo "==================== ALL CHECKS PASSED ==============="
