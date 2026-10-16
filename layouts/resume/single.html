@@ -2,9 +2,9 @@
 
 {{ $hutson := hugo.Data.hutson | default dict }}
 
-{{/* Only professional-tagged content may appear on this page: .tools/build.sh
-renders it to /hutson/resume.pdf unchanged. */}}
-{{ $professionalProjects := where $hutson.projects "tag" "professional" }}
+{{/* Only active, professional-tagged content may appear on this page: .tools/build.sh
+renders it to /hutson/resume.pdf unchanged, so the PDF matches the page's projects. */}}
+{{ $professionalProjects := where (where $hutson.projects "tag" "professional") "status" "active" }}
 {{ $professionalGuides := slice }}
 {{ $professionalArticles := slice }}
 {{ with site.GetPage "hutson/guides" }}

@@ -10,7 +10,7 @@ contact:
   phone:
   linkedin: https://www.linkedin.com/in/hutson-betts/
   mastodon:
-  fedora:
+  fedora: https://discussion.fedoraproject.org/u/hutson/summary
   debian:
   kde:
   location: Texas, USA
@@ -61,7 +61,7 @@ skills:
 projects:
   # status must be either "active" or "past"; templates filter on this value.
   # tag must be either "personal" or "professional" (default "personal").
-  # Only "professional" projects surface on the resume page and PDF.
+  # Only active, "professional" projects surface on the resume page and PDF.
   # kind: "contributed" marks projects I contribute to but don't own;
   # layouts/projects/list.html renders these under "Projects Where I Contribute".
   - title: dotfiles
@@ -69,13 +69,13 @@ projects:
       Personal shell scripts and development environment configuration files.
     repository: https://codeberg.org/hutson/dotfiles
     status: active
-    tag: personal
+    tag: professional
   - title: hyper-expanse
     description: |-
       Code and content behind my personal website.
     repository: https://codeberg.org/hutson/hyper-expanse
     status: active
-    tag: personal
+    tag: professional
   - title: dayone-to-joplin
     description: |-
       Import a Day One JSON export into the Joplin note-taking application with all journal entries and photos.

@@ -6,7 +6,7 @@ This repository contains the source for the [hyper-expanse.net](https://hyper-ex
 
 Author projects, publications, employment, and education in `data/hutson.yaml`, and guides and articles under `content/hutson/<section>/`.
 
-Tag every project, article, and guide `personal` (default) or `professional`, using the `projects:` list in `data/hutson.yaml` for projects and front matter for guides and articles. `professional` items are assembled into `/hutson/resume/` and `/hutson/resume.pdf`; `personal` items appear only on their source page. Set `tag: professional` to opt a new item into the resume.
+Tag every project, article, and guide `personal` (default) or `professional`, using the `projects:` list in `data/hutson.yaml` for projects and front matter for guides and articles. `professional` items are assembled into `/hutson/resume/` and `/hutson/resume.pdf`; `personal` items appear only on their source page. Projects must also carry `status: active` to appear on the resume; `past` projects appear only on `/hutson/projects/`. Set `tag: professional` to opt a new item into the resume.
 
 Create content with the archetypes so front matter is pre-filled:
 
