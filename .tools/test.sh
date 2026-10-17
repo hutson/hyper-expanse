@@ -40,6 +40,12 @@ fi
 echo "✓ 'shellcheck' passed"
 echo
 
+echo "==================== SECRET SCANNING ==================="
+echo "Running gitleaks to scan the working tree for leaked secrets..."
+gitleaks dir . --no-banner
+echo "✓ 'gitleaks' passed"
+echo
+
 # Our website build must take place before we can validate HTML,
 # Styles, and Accessibility.
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
