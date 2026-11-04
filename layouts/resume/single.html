@@ -36,21 +36,26 @@ renders it to /hutson/resume.pdf unchanged, so the PDF matches the page's projec
 	</section>
 	{{ end }}
 
-	{{ with $hutson.skills }}
+	{{/* uniq keeps the promoted list deduplicated, matching keySkills() in scripts/sync-profiles.js. */}}
+	{{ $keySkills := slice }}
+	{{ range $hutson.employment }}
+	{{ range .roles }}
+	{{ range .skills }}
+	{{ if .key }}
+	{{ $keySkills = $keySkills | append .name }}
+	{{ end }}
+	{{ end }}
+	{{ end }}
+	{{ end }}
+	{{ $keySkills = $keySkills | uniq }}
+	{{ with $keySkills }}
 	<section class="skills">
 		<h2>Skills</h2>
-		<div class="skill-columns">
-		{{ range . }}
-		<section>
-			<h3>{{ .category }}</h3>
-			<ul>
-				{{ range .items }}
-				<li>{{ . }}</li>
-				{{ end }}
-			</ul>
-		</section>
-		{{ end }}
-		</div>
+		<ul>
+			{{ range . }}
+			<li>{{ . }}</li>
+			{{ end }}
+		</ul>
 	</section>
 	{{ end }}
 
@@ -66,8 +71,8 @@ renders it to /hutson/resume.pdf unchanged, so the PDF matches the page's projec
 				{{ with .description }}
 				<p>{{ . }}</p>
 				{{ end }}
-				{{ with .repository }}<p><b>→</b> <a href="{{ . }}">{{ . }}</a></p>{{ end }}
-				{{ with .url }}<p><b>→</b> <a href="{{ . }}">{{ . }}</a></p>{{ end }}
+				{{ with .repository }}<p><a href="{{ . }}">{{ . }}</a></p>{{ end }}
+				{{ with .url }}<p><a href="{{ . }}">{{ . }}</a></p>{{ end }}
 			</article>
 			{{ end }}
 		</div>
@@ -79,7 +84,7 @@ renders it to /hutson/resume.pdf unchanged, so the PDF matches the page's projec
 		<h2>Articles</h2>
 		<ul>
 			{{ range . }}
-			<li><a href="{{ .RelPermalink }}">{{ .Title }}</a> — <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time></li>
+			<li><a href="{{ .RelPermalink }}">{{ .Title }}</a> <time class="muted" datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time></li>
 			{{ end }}
 		</ul>
 	</section>
@@ -100,28 +105,35 @@ renders it to /hutson/resume.pdf unchanged, so the PDF matches the page's projec
 	<section class="experience">
 		<h2>Experience</h2>
 		{{ range . }}
+		{{ $companyTitle := .title }}
 		<article>
 			<header>
 				{{ if .website }}
-				<h3><a href="{{ .website }}">{{ .company }}</a> — {{ .title }}</h3>
+				<h3><a href="{{ .website }}">{{ .company }}</a></h3>
 				{{ else }}
-				<h3>{{ .company }} — {{ .title }}</h3>
+				<h3>{{ .company }}</h3>
 				{{ end }}
-				<p class="subtitle">
+				<p class="muted">
 					{{ partial "datetime.html" .start }} – {{ partial "datetime.html" .end }}
 				</p>
 			</header>
 			{{ range .roles }}
-			{{ if .start }}
-			<p class="role-dates">
-				{{ partial "datetime.html" .start }} – {{ partial "datetime.html" .end }}
-			</p>
-			{{ end }}
+			{{ $roleTitle := .title | default $companyTitle }}
+			<p class="role-dates"><b>{{ $roleTitle }}</b>{{ if .start }} <span class="muted">{{ partial "datetime.html" .start }} – {{ partial "datetime.html" .end }}</span>{{ end }}</p>
 			<ul>
 				{{ range .contributions }}
 				<li>{{ . }}</li>
 				{{ end }}
 			</ul>
+			{{ with .skills }}
+			<div class="role-skills"><b>Skills:</b>
+				<ul class="muted">
+					{{ range . }}
+					<li>{{ .name }}</li>
+					{{ end }}
+				</ul>
+			</div>
+			{{ end }}
 			{{ end }}
 		</article>
 		{{ end }}
@@ -135,7 +147,7 @@ renders it to /hutson/resume.pdf unchanged, so the PDF matches the page's projec
 		<article>
 			<header>
 				<h3>{{ .school }}</h3>
-				<p class="subtitle">
+				<p class="muted">
 					{{ partial "datetime.html" .start }} – {{ partial "datetime.html" .end }}
 				</p>
 			</header>

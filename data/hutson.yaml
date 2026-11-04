@@ -40,24 +40,6 @@ description_personal: |-
 description_professional: |-
   My professional passion is to improve the software engineering experience through advocacy, guidance, and the development of automation tooling. Typically this means one of three things: automating away daily toil so developers can focus on tasks that are more enjoyable and better aligned with their goals, deploying infrastructure to provide the appropriate layer of abstraction needed by development teams (IaaS/PaaS/SaaS), and offering my opinion when asked on topics such as engineering best practices, software sustainability, or what it takes to create a happy and productive environment for software development.
 
-skills:
-  - category: Cloud & Infrastructure
-    items:
-      - AWS
-      - Terraform
-      - Packer
-  - category: Source Control & CI/CD
-    items:
-      - Git (GitHub, GitLab, Forgejo)
-      - GitHub Actions
-      - Jenkins
-  - category: Languages
-    items:
-      - Bash
-      - Golang
-      - Lua
-      - Python
-
 projects:
   # status must be either "active" or "past"; templates filter on this value.
   # tag must be either "personal" or "professional" (default "personal").
@@ -121,27 +103,108 @@ employment:
     website: https://www.factset.com/
     roles:
       - end: Present
+        start: "2026-09"
+        title: Principal Software Engineer
+        contributions:
+          - Technical lead for a team at FactSet responsible for architecting and building infrastructure that supports most engineers at FactSet in the areas of source control, artifact storage and distribution, continuous integration and delivery, code intelligence, and code quality analysis.
+          - Recruited and trained a geographically-distributed agile engineering team to maintain the services and platforms our team provides to FactSet's engineering organization.
+          - Lead for the platform that forms the foundation for FactSet's new internal developer platform.
+          - Lead for FactSet's internal code quality analysis platform since 2023.
+          - Lead for FactSet's internal code intelligence strategy and infrastructure since 2022.
+          - Maintained compliance with FactSet's RTO/RPO requirements for our team's tier-0 platforms.
+        skills:
+          - name: Go (Programming Language)
+            key: true
+          - name: Platform Engineering
+            key: true
+          - name: Technical Leadership
+            key: true
+          - name: Git
+          - name: Continuous Integration
+            key: true
+          - name: Generative AI
+          - name: Prompt Engineering
+          - name: Amazon Web Services (AWS)
+          - name: Terraform
+          - name: GitHub Actions
+          - name: Linux
+          - name: Packer
+          - name: Bash
+          - name: Mentoring
+          - name: Observability
+          - name: Disaster Recovery
+            key: true
+          - name: Kubernetes
+          - name: Argo CD
+          - name: Prometheus
+          - name: Open Policy Agent (OPA)
+      - end: "2026-08"
         start: "2019-09"
+        title: Principal Software Engineer
         contributions:
           - Technical lead for a team at FactSet responsible for architecting and building infrastructure that supports most engineers at FactSet in the areas of source control, artifact storage and distribution, continuous integration and delivery, code intelligence, generative AI coding assistants, and code quality analysis.
           - Recruited and trained a geographically-distributed agile engineering team to maintain the services and platforms our team provides to FactSet's engineering organization.
           - Lead for FactSet's internal generative AI coding assistant strategy and deployment since 2024.
           - Lead for FactSet's internal code quality analysis platform since 2023.
           - Lead for FactSet's internal code intelligence strategy and infrastructure since 2022.
-          - Technologies and tools I often work with include Git, AWS, Terraform, Packer, Bash, Golang, Lua, Linux, and a whole lot of different package managers.
+          - Led team through implementation of a disaster recovery (DR) strategy to meet aggressive RTO/RPO requirements for our team's tier-0 platforms.
+        skills:
+          - name: Generative AI
+          - name: Prompt Engineering
+          - name: AI Governance
+          - name: Tool Governance
+          - name: Git
+          - name: Continuous Integration
+          - name: Go (Programming Language)
+          - name: Terraform
+          - name: Amazon Web Services (AWS)
+          - name: GitHub Actions
+          - name: Technical Leadership
+          - name: Linux
+          - name: Packer
+          - name: Bash
+          - name: Mentoring
+          - name: Disaster Recovery
+          - name: Prometheus
+          - name: Error Budget
       - end: "2019-08"
         start: "2019-01"
+        title: Lead Software Engineer
         contributions:
           - Contributed to a Platform as a Service internal product.
-          - Developed shared library, and its release process, for sharing components across PaaS portals.
+          - Developed shared library, and its release process, for sharing components across PaaS portals, ensuring consistent product behavior across portals.
+          - Participated in the initial development of an internal feature-flag platform that grew to serve the majority of FactSet's products.
+        skills:
+          - name: Platform as a Service (PaaS)
+          - name: JavaScript
+          - name: Node.js
+          - name: TypeScript
+          - name: Docker
+          - name: Feature Flags
+          - name: Git
+          - name: Terraform
+          - name: Bash
+          - name: Amazon Web Services (AWS)
       - end: "2018-12"
         start: "2018-02"
+        title: Lead Software Engineer
         contributions:
           - Led Open Source initiative for System Infrastructure department, doubling the number of Open Source projects.
           - Managed infrastructure for automated dependency management; including upgrading and deprecation of packages.
           - Developed release tool prototype capable of on-boarding many languages with automated package release workflows, all while minimizing operational overhead.
+        skills:
+          - name: Technical Leadership
+          - name: Open Source Software
+          - name: Continuous Integration
+          - name: Node.js
+          - name: Npm
+          - name: Python
+          - name: Git
+          - name: JavaScript
+          - name: Bash
       - end: "2018-01"
         start: "2015-10"
+        title: Senior Software Engineer
         contributions:
           - Delivered on our company's need for pre-configured tooling to build client facing web applications, libraries, and NodeJS services.
           - Leveraged best of breed tools, such as GulpJS, Babel, Mocha, Karma, Express, Webpack, Rollup, etc.
@@ -153,24 +216,72 @@ employment:
           - Established a process for quick deployment of tool configuration for consistent use of best practices across software projects; such as TSLint, Babel, and TypeScript.
           - Authored our company's NodeJS usage policy for production processes, and fulfill role as point person for engaging the NodeJS community, including the Node LTS Working Group.
           - Organized a bi-weekly developer tool roundtable consisting of developers from across the company.
+        skills:
+          - name: Node.js
+          - name: JavaScript
+          - name: TypeScript
+          - name: Webpack
+          - name: Npm
+          - name: Babel
+          - name: Express.js
+          - name: Gulp.js
+          - name: Yeoman
+          - name: Mocha
+          - name: Rollup
+          - name: TSLint
+          - name: ESLint
+          - name: Developer Tooling
+          - name: Tool Governance
+          - name: Guidance Group
       - end: "2016-09"
         start: "2015-10"
+        title: Software Engineer
         contributions:
           - Participated in on-call rotation for git-based GitLab source control instance, artifact repository, and continuous integration and delivery (CI/CD) platform; providing effective, and timely, support for outages and consumer needs.
           - Appointed to the Architecture Review Board; a group tasked with defining company-wide engineering best practices and approving standard technology solutions.
+        skills:
+          - name: Git
+          - name: Continuous Integration
+          - name: Linux
+          - name: Bash
+          - name: Software Architecture
+          - name: Agile Methodologies
+          - name: Jenkins
+          - name: Architectural Review Board
       - end: "2015-09"
         start: "2014-10"
+        title: Software Engineer
         contributions:
           - Developed scaffolding tool, using Yeoman framework, to bootstrap new Analytics and Fixed Income NodeJS services.
           - Collaborated with engineers across multiple departments to maintain the build and deployment infrastructure for the company's web products; which included working with Jenkins and Perforce.
           - Assisted Analytics and Fixed Income software engineers troubleshoot build and deployment issues affecting their web products.
           - Researched emerging web technologies, such as the evolving ECMA-262 standard, and explored approaches to improve the developer experience.
+        skills:
+          - name: JavaScript
+          - name: Node.js
+          - name: Yeoman
+          - name: Jenkins
+          - name: Perforce
+          - name: Npm
+          - name: Bash
+          - name: Git
+          - name: HTML/CSS
+          - name: Continuous Integration
       - end: "2014-10"
         start: "2012-06"
+        title: Software Engineer
         contributions:
           - Led retirement of key legacy application through community and product stakeholder engagement.
           - Collaborated on building, from the ground up, one of the first web-based products for the Analytics department using BackboneJS, before migrating to AngularJS in response to our changing requirements and needs.
           - Participated in a critical on-call rotation managing client portfolio data.
+        skills:
+          - name: Backbone.js
+          - name: HTML/CSS
+          - name: Web Development
+          - name: Data Management
+          - name: AngularJS
+          - name: JavaScript
+          - name: Perforce
   - company: Texas A&M University
     end: "2012-06"
     start: "2010-02"
@@ -183,6 +294,15 @@ employment:
           - Enabled VNEL's ability to rapidly scale by deploying an OpenNebula private cloud with GlusterFS as the storage backend.
           - Built a virtual network orchestrator with Python, exposing functionality through a REST API.
           - Sustained strong uptime at VNEL through network monitoring and alerting using an in-house deployment of OpenNMS.
+          - Secured VNEL through VLAN segmentation and regular security patching, creating an isolated environment where hundreds of students from other colleges conducted security training.
+        skills:
+          - name: Linux
+          - name: OpenNebula
+          - name: GlusterFS
+          - name: OpenNMS
+          - name: Network Security
+          - name: Bazaar
+          - name: Mercurial
   - company: Texas Engineering Extension Service
     end: "2009-08"
     start: "2006-08"
@@ -195,6 +315,14 @@ employment:
           - Gained experience in various engineering fields through cross functional collaboration, system operations, and embedded hardware and software teamwork.
           - Gained experience in management and organizational system processes.
           - Led year long development effort on mission critical ground support software project with a team of 5 undergraduate students following Agile principles facilitated through the Scrum development framework.
+        skills:
+          - name: Embedded Systems
+          - name: C/C++
+          - name: Scrum
+          - name: Linux
+          - name: Technical Leadership
+          - name: Agile Methodologies
+          - name: Git
   - company: Texas A&M University - Galveston
     end: "2006-05"
     start: "2005-08"
@@ -203,6 +331,10 @@ employment:
     roles:
       - contributions:
           - Supported various office functions including receptionist, intra campus mail delivery, organization of student documentation, and student documentation filing.
+        skills:
+          - name: Administrative Support
+          - name: Customer Service
+          - name: Data Entry
 
 # education is intentionally empty; the resume template skips the section
 # when no entries exist. Each entry expects: school, start, end, details (optional).

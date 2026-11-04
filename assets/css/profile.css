@@ -52,9 +52,6 @@ nav a[aria-current="page"] {
 	white-space: nowrap;
 }
 
-/* Middle dot is glued to the preceding link by a leading non-breaking space so
-the separator can never orphan onto the start of a wrapped line; the trailing
-regular space is the single break opportunity between entries. */
 .connections li:not(:last-child)::after {
 	content: "\00A0\00B7\0020";
 	opacity: 0.6;
@@ -72,7 +69,6 @@ main h1 {
 
 #profile {
 	display: flow-root;
-	text-align: justify;
 }
 
 #profile h1 {
@@ -87,12 +83,6 @@ main h1 {
 #profile img {
 	border-radius: 50%;
 	display: block;
-}
-
-#articles,
-#guides,
-#publications {
-	text-align: justify;
 }
 
 #articles ul,
@@ -162,10 +152,6 @@ main h1 {
 	margin-bottom: 1.5rem;
 }
 
-#resume {
-	text-align: justify;
-}
-
 #resume header {
 	margin-bottom: 0.25rem;
 }
@@ -183,6 +169,7 @@ main h1 {
 
 #resume section {
 	margin-bottom: 0.5rem;
+	margin-top: 1.5rem;
 }
 
 #resume h3 {
@@ -202,11 +189,6 @@ main h1 {
 	margin-bottom: 1.5rem;
 }
 
-#resume .experience .subtitle {
-	font-size: 0.95rem;
-	font-weight: normal;
-}
-
 #resume .download {
 	margin-top: 2rem;
 	text-align: center;
@@ -217,20 +199,49 @@ main h1 {
 	padding-left: 0.75rem;
 }
 
-#resume .skill-columns {
-	display: grid;
-	gap: 0.5rem 1.5rem;
-	grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+#resume .role-skills {
+	font-size: 0.85rem;
+	margin: 0.25rem 0 0;
+	padding-left: 1.25rem;
 }
 
-#resume .skill-columns h3 {
-	margin-bottom: 0.15rem;
-	white-space: nowrap;
-}
-
-#resume .skill-columns ul {
+#resume .role-skills ul {
+	list-style: none;
 	margin: 0;
-	padding-left: 1.1rem;
+	padding: 0;
+	display: inline;
+}
+
+/* hugo --minify drops the whitespace text node between the label and the ul,
+so the separating gap must come from CSS. It sits on the label's padding,
+which applies exactly once before the first pill and leaves wrapped pill rows
+aligned with the label instead of indented under it. */
+#resume .role-skills b {
+	padding-right: 0.5rem;
+}
+
+#resume .role-dates {
+	margin: 1rem 0 0.25rem;
+}
+
+#resume .skills ul {
+	list-style: none;
+	margin: 0.5rem 0;
+	padding: 0;
+}
+
+#resume .skills li,
+#resume .role-skills li {
+	border: 1px solid var(--bar);
+	border-radius: 999px;
+	display: inline-block;
+	margin: 0 0.5rem 0.5rem 0;
+	padding: 0.15rem 0.75rem;
+}
+
+#resume .role-skills li {
+	font-size: 0.75rem;
+	padding: 0.075rem 0.4rem;
 }
 
 @media screen and (prefers-color-scheme: light) {
@@ -246,9 +257,6 @@ main h1 {
 	}
 }
 
-/* Stack the nav below the point where the centered link list and the
-nowrap logo can no longer share a row (logo ~170px + links ~550px + the two
-side tracks). */
 @media (width <= 920px) {
 	nav {
 		grid-template-columns: 1fr;
@@ -264,23 +272,12 @@ side tracks). */
 	}
 }
 
-/* Narrow screens: drop the avatar float so profile text is not squeezed
-beside it, and disable justification because the remaining line widths are
-too short to space words without large gaps. */
 @media (width <= 600px) {
 	#profile picture {
 		display: block;
 		float: none;
 		margin: 0 auto 1rem;
 		width: fit-content;
-	}
-
-	#profile,
-	#articles,
-	#guides,
-	#publications,
-	#resume {
-		text-align: left;
 	}
 
 	#profile h1,

@@ -18,16 +18,6 @@
 // the worst case is reprinted instructions, and the repository stays free of
 // generated bookkeeping files.
 //
-// TODO: Wire `audit` into a scheduled CI job once we decide how gh, fj, and
-// npm credentials reach the Codeberg Actions runner. Preflight failures
-// should fail that job so a missing login is never mistaken for drift. This
-// must stay out of .tools/test.sh, which is offline and deterministic.
-//
-// Output split: the audit report, the manual copy-paste blocks, and the
-// usage text go to stdout (the blocks are content the operator copies);
-// errors, progress notes, and preflight failures go to stderr, unchanged from
-// the original check-profiles.js.
-
 const fs = require("node:fs/promises");
 const os = require("node:os");
 const path = require("node:path");
@@ -581,6 +571,19 @@ async function loadCanonical(sourceDir) {
 			tag: project.tag ?? "personal",
 			status: project.status ?? "active",
 		}));
+	const employment = (data.employment ?? []).map((job) => ({
+		...job,
+		title: normalizeText(job?.title ?? ""),
+		roles: (job?.roles ?? []).map((role) => ({
+			...role,
+			title: normalizeText(role?.title ?? ""),
+			contributions: (role?.contributions ?? []).map(normalizeText),
+			skills: (role?.skills ?? []).map((skill) => ({
+				...skill,
+				name: normalizeText(skill?.name ?? ""),
+			})),
+		})),
+	}));
 	return {
 		name: normalizeText(data.name ?? ""),
 		title: normalizeText(data.title ?? ""),
@@ -596,7 +599,7 @@ async function loadCanonical(sourceDir) {
 			items: (group?.items ?? []).map(normalizeText),
 		})),
 		projects,
-		employment: data.employment ?? [],
+		employment,
 		publications: data.publications ?? [],
 		contact: data.contact ?? {},
 		follow: data.follow ?? [],
@@ -635,6 +638,32 @@ function collectLinkUrls(canonical) {
 	return urls;
 }
 
+function keySkills(canonical) {
+	const names = [];
+	for (const job of canonical.employment) {
+		for (const role of job.roles ?? []) {
+			for (const skill of role.skills ?? []) {
+				if (skill?.key && skill.name && !names.includes(skill.name)) {
+					names.push(skill.name);
+				}
+			}
+		}
+	}
+	return names;
+}
+
+function profileSkills(canonical) {
+	const names = keySkills(canonical);
+	for (const group of canonical.skills) {
+		for (const item of group.items) {
+			if (!names.includes(item)) {
+				names.push(item);
+			}
+		}
+	}
+	return names;
+}
+
 // One Markdown document, pushed unchanged to both profile README repos, so
 // the two forges show identical content rendered from the same model the
 // comparisons use.
@@ -645,6 +674,10 @@ function renderProfileReadme(canonical) {
 		`**${canonical.title}**`,
 		"",
 		canonical.description,
+		"",
+		"## Skills",
+		"",
+		...profileSkills(canonical).map((skill) => `- ${skill}`),
 		"",
 		"## Projects",
 		"",
@@ -664,14 +697,31 @@ function renderLinkedInExperience(canonical) {
 		.map((job) =>
 			(job.roles ?? [])
 				.filter((role) => (role.contributions ?? []).length > 0)
-				.map((role) =>
-					[
-						`${formatMonthYear(role.start)} - ${formatMonthYear(role.end)}`,
-						`${job.title} at ${job.company}`,
+				.map((role) => {
+					// LinkedIn entries are a flat list, so a role without its own dates
+					// inherits the job's span; gated like the resume template, an entry
+					// with neither prints no date line rather than a bare " - ".
+					const start = role.start || job.start;
+					const end = role.end || job.end;
+					const lines = [];
+					if (start || end) {
+						lines.push(`${formatMonthYear(start)} - ${formatMonthYear(end)}`);
+					}
+					// || rather than ?? so an empty title falls back to the job title,
+					// the same emptiness rule the template's default applies.
+					lines.push(
+						`${role.title || job.title} at ${job.company}`,
 						"",
-						...role.contributions.map((contribution) => `- ${normalizeText(contribution)}`),
-					].join("\n"),
-				)
+						...role.contributions.map((contribution) => `- ${contribution}`),
+					);
+					const skillNames = (role.skills ?? [])
+						.map((skill) => skill.name)
+						.filter(Boolean);
+					if (skillNames.length > 0) {
+						lines.push("", `Skills: ${skillNames.join(", ")}`);
+					}
+					return lines.join("\n");
+				})
 				.join("\n\n"),
 		)
 		.join("\n\n");
@@ -683,14 +733,21 @@ function renderLinkedInExperience(canonical) {
 // website profile page voice) and falls back to the professional one.
 function linkedinBlocks(canonical) {
 	const profileUrl = canonical.links.linkedin || DEFAULT_LINKEDIN_PROFILE_URL;
+	const elevated = keySkills(canonical);
+	const skillLines = [];
+	// The count is the data's, so the label cannot drift from the number of key
+	// flags, and an empty promotion prints no line rather than "Elevated ():".
+	if (elevated.length > 0) {
+		skillLines.push(`Elevated (top ${elevated.length}): ${elevated.join(", ")}`);
+	}
+	for (const group of canonical.skills) {
+		skillLines.push(`${group.category}: ${group.items.join(", ")}`);
+	}
 	return [
 		{ field: "Headline", value: canonical.descriptionSeo || canonical.title },
 		{ field: "About", value: canonical.descriptionPersonal || canonical.description },
 		{ field: "Experience", value: renderLinkedInExperience(canonical) },
-		{
-			field: "Skills",
-			value: canonical.skills.map((group) => `${group.category}: ${group.items.join(", ")}`).join("\n"),
-		},
+		{ field: "Skills", value: skillLines.join("\n") },
 		{ field: "Featured links", value: collectLinkUrls(canonical).join("\n") },
 		{ field: "Photo", value: `Upload ${canonical.avatar.path}` },
 	].map((block) => ({ ...block, url: profileUrl }));
@@ -1687,6 +1744,7 @@ module.exports = {
 	fetchWithTimeout,
 	formatMonthYear,
 	githubMirrorDescription,
+	keySkills,
 	loadCanonical,
 	makeResult,
 	normalizeText,
@@ -1695,6 +1753,7 @@ module.exports = {
 	parseFjUserView,
 	parseOpenCollectiveProfile,
 	parsePypiTitle,
+	profileSkills,
 	renderAudit,
 	renderLinkedInExperience,
 	renderProfileReadme,
